@@ -5,7 +5,7 @@ from models import *
 @app.route('/')
 @app.route('/index')
 def index():
-    return render_template('login.html')
+    threads = 
 
 @app.route('/login')
 def login():

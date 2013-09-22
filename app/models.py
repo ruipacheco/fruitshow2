@@ -27,18 +27,6 @@ class User(db.Model):
     email = db.Column(db.String(255), nullable=False)
     is_admin = db.Column(db.Boolean, nullable=False, default=False)
     is_deleted = db.Column(db.Boolean, nullable=False, default=False)
-    
-    def is_authenticated(self):
-        return True
-
-    def is_active(self):
-        return is_deleted
-
-    def is_anonymous(self):
-        return False
-
-    def get_id(self):
-        return unicode(self.id)
 
 class Thread(db.Model):
 
@@ -54,6 +42,7 @@ class Thread(db.Model):
     category = relationship(Category, backref='threads')
     display_hash = db.Column(db.String(255), nullable=False)
     spam = db.Column(db.Boolean, nullable=False, default=False)
+    display_name = db.Column(db.String(255), nullable=True)
 
 class Post(db.Model):
 

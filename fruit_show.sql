@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Sep 15, 2013 at 04:02 AM
+-- Generation Time: Sep 15, 2013 at 04:44 AM
 -- Server version: 5.5.32-0ubuntu0.13.04.1
 -- PHP Version: 5.4.9-4ubuntu2.3
 
@@ -69,6 +69,7 @@ CREATE TABLE IF NOT EXISTS `Thread` (
   `category_id` int(11) NOT NULL,
   `display_hash` varchar(255) COLLATE utf8_bin NOT NULL,
   `spam` tinyint(1) NOT NULL DEFAULT '0',
+  `display_name` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   PRIMARY KEY (`thread_id`),
   KEY `created_by` (`created_by`),
   KEY `thread_id` (`thread_id`),
