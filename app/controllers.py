@@ -6,4 +6,4 @@ from models import *
 @app.route('/index')
 def index():
     threads = Thread.query.filter(Thread.display_name != None).all()
-    return threads
+    return ''
