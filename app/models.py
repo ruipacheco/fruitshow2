@@ -13,6 +13,10 @@ class Category(db.Model):
     category_id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255), nullable=False)
     date_created = db.Column(db.DateTime, nullable=False, default=datetime.now())
+    
+    def __repr__(self):
+        return '<Category %r>' % (self.title)
+        
 
 class User(db.Model):
 
@@ -27,6 +31,10 @@ class User(db.Model):
     email = db.Column(db.String(255), nullable=False)
     is_admin = db.Column(db.Boolean, nullable=False, default=False)
     is_deleted = db.Column(db.Boolean, nullable=False, default=False)
+    
+    def __repr__(self):
+        return '<User %r>' % (self.username)
+
 
 class Thread(db.Model):
 
@@ -43,6 +51,10 @@ class Thread(db.Model):
     display_hash = db.Column(db.String(255), nullable=False)
     spam = db.Column(db.Boolean, nullable=False, default=False)
     display_name = db.Column(db.String(255), nullable=True)
+    
+    def __repr__(self):
+        return '<Thread %r>' % (self.title)
+
 
 class Post(db.Model):
 
@@ -50,7 +62,7 @@ class Post(db.Model):
 
     post_id = db.Column(db.Integer, primary_key=True)
     body = db.Column(db.Text, nullable=False)
-    date_created = db.Column(db.DateTime, nullable=False)
+    date_created = db.Column(db.DateTime, nullable=False, default=datetime.now())
     spam = db.Column(db.Boolean, nullable=False, default=0)
     created_by = db.Column(db.Integer, ForeignKey(User.user_id))
     user = relationship(User, backref='posts')
@@ -58,3 +70,6 @@ class Post(db.Model):
     thread = relationship(Thread, backref='posts')
     display_hash = db.Column(db.String(255), nullable=False)
     display_name = db.Column(db.String(255), nullable=True)
+    
+    def __repr__(self):
+        return '<Post %r>' % (self.date_created)
