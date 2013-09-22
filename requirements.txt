@@ -1,4 +1,5 @@
 Flask-Login==0.2.6
+Flask-Failsafe==0.1
 Flask-Mail==0.9.0
 Flask-SQLAlchemy==1.0
 Flask-WTF==0.8.4
