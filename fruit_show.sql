@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Sep 15, 2013 at 05:57 AM
+-- Generation Time: Sep 15, 2013 at 12:23 PM
 -- Server version: 5.5.32-0ubuntu0.13.04.1
 -- PHP Version: 5.4.9-4ubuntu2.3
 
@@ -33,14 +33,7 @@ CREATE TABLE IF NOT EXISTS `Category` (
   `date_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`category_id`),
   KEY `parent_category_id` (`parent_category_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=2 ;
-
---
--- Dumping data for table `Category`
---
-
-INSERT INTO `Category` (`category_id`, `parent_category_id`, `title`, `date_created`) VALUES
-(1, 0, 'Public', '2013-09-15 03:53:00');
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=4 ;
 
 -- --------------------------------------------------------
 
@@ -53,7 +46,7 @@ CREATE TABLE IF NOT EXISTS `Post` (
   `body` text COLLATE utf8_bin NOT NULL,
   `date_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `spam` tinyint(1) NOT NULL DEFAULT '0',
-  `created_by` int(11) NOT NULL,
+  `created_by` int(11) DEFAULT NULL,
   `thread_id` int(11) NOT NULL,
   `display_hash` varchar(255) COLLATE utf8_bin NOT NULL,
   `display_name` varchar(255) COLLATE utf8_bin DEFAULT NULL,
@@ -61,7 +54,7 @@ CREATE TABLE IF NOT EXISTS `Post` (
   KEY `display_hash` (`display_hash`),
   KEY `created_by` (`created_by`,`thread_id`,`display_hash`),
   KEY `thread_id` (`thread_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=10 ;
 
 -- --------------------------------------------------------
 
@@ -84,7 +77,7 @@ CREATE TABLE IF NOT EXISTS `Thread` (
   KEY `thread_id` (`thread_id`),
   KEY `category_id` (`category_id`),
   KEY `display_hash` (`display_hash`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=15 ;
 
 -- --------------------------------------------------------
 
@@ -126,8 +119,8 @@ CREATE TABLE IF NOT EXISTS `User_Category` (
 -- Constraints for table `Post`
 --
 ALTER TABLE `Post`
-  ADD CONSTRAINT `Post_ibfk_1` FOREIGN KEY (`created_by`) REFERENCES `User` (`user_id`),
-  ADD CONSTRAINT `Post_ibfk_2` FOREIGN KEY (`thread_id`) REFERENCES `Thread` (`thread_id`);
+  ADD CONSTRAINT `Post_ibfk_3` FOREIGN KEY (`thread_id`) REFERENCES `Thread` (`thread_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `Post_ibfk_1` FOREIGN KEY (`created_by`) REFERENCES `User` (`user_id`);
 
 --
 -- Constraints for table `Thread`

@@ -55,10 +55,11 @@ class Thread(db.Model):
     spam = db.Column(db.Boolean, nullable=False, default=False)
     display_name = db.Column(db.String(255), nullable=True)
     
-    def __init__(self, title=None, body=None, category_id=None):
+    def __init__(self, title=None, body=None, category_id=None, display_name=display_name):
         self.title = title
         self.body = body
         self.category_id = category_id
+        self.display_name=display_name
         self.display_hash = uuid()
     
     def __repr__(self):
@@ -85,7 +86,7 @@ class Post(db.Model):
     display_hash = db.Column(db.String(255), nullable=False)
     display_name = db.Column(db.String(255), nullable=True)
     
-    def __init__(self, body=None, thread_id=None, created_by=None, display_name='Tits McGee'):
+    def __init__(self, body=None, thread_id=None, created_by=None, display_name=None):
         self.body = body
         self.thread_id = thread_id
         self.display_hash = uuid()

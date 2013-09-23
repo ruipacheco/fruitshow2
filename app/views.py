@@ -29,7 +29,8 @@ def create_thread():
     title = request.form['title']
     body = request.form['body']
     category_id = request.form['category_id']
-    thread = Thread(title=title, body=body, category_id=category_id)
+    display_name = request.form['display_name']
+    thread = Thread(title=title, body=body, category_id=category_id, display_name=display_name)
     db.session.add(thread)
     db.session.commit()
     
