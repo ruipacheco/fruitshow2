@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Sep 15, 2013 at 04:44 AM
+-- Generation Time: Sep 15, 2013 at 05:57 AM
 -- Server version: 5.5.32-0ubuntu0.13.04.1
 -- PHP Version: 5.4.9-4ubuntu2.3
 
@@ -28,10 +28,19 @@ SET time_zone = "+00:00";
 
 CREATE TABLE IF NOT EXISTS `Category` (
   `category_id` int(11) NOT NULL AUTO_INCREMENT,
+  `parent_category_id` int(11) DEFAULT NULL,
   `title` varchar(255) COLLATE utf8_bin NOT NULL,
   `date_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`category_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=1 ;
+  PRIMARY KEY (`category_id`),
+  KEY `parent_category_id` (`parent_category_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=2 ;
+
+--
+-- Dumping data for table `Category`
+--
+
+INSERT INTO `Category` (`category_id`, `parent_category_id`, `title`, `date_created`) VALUES
+(1, 0, 'Public', '2013-09-15 03:53:00');
 
 -- --------------------------------------------------------
 
@@ -65,7 +74,7 @@ CREATE TABLE IF NOT EXISTS `Thread` (
   `title` varchar(255) COLLATE utf8_bin NOT NULL,
   `body` text COLLATE utf8_bin,
   `date_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `created_by` int(11) NOT NULL,
+  `created_by` int(11) DEFAULT NULL,
   `category_id` int(11) NOT NULL,
   `display_hash` varchar(255) COLLATE utf8_bin NOT NULL,
   `spam` tinyint(1) NOT NULL DEFAULT '0',
@@ -75,7 +84,7 @@ CREATE TABLE IF NOT EXISTS `Thread` (
   KEY `thread_id` (`thread_id`),
   KEY `category_id` (`category_id`),
   KEY `display_hash` (`display_hash`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=3 ;
 
 -- --------------------------------------------------------
 
