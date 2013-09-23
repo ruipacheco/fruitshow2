@@ -7,4 +7,4 @@ db = SQLAlchemy(app)
 lm = LoginManager()
 lm.init_app(app)
 
-from app import controllers, models
+from app import views, models

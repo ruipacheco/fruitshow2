@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form name="new_post" method="POST" action="/create_thread">
+	<select name="category_id" id="category_id">
+		{% for category in categories %}
+		<option value="{{ category.category_id }}">{{ category.title }}</option>
+		{% endfor %}
+	</select>
+	<br />
+	<input type="text" name="title" id="title" /><br />
+	<textarea name="body" id="body"></textarea>
+	<br />
+	<input type="submit" name="save" id="save" title="Save" />
+</form>
+{% endblock %}

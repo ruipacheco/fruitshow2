@@ -5,6 +5,9 @@ from sqlalchemy.orm import relationship, backref
 import datetime
 from datetime import datetime
 
+import shortuuid
+from shortuuid import uuid
+
 
 class Category(db.Model):
 
@@ -52,8 +55,19 @@ class Thread(db.Model):
     spam = db.Column(db.Boolean, nullable=False, default=False)
     display_name = db.Column(db.String(255), nullable=True)
     
+    def __init__(self, title=None, body=None, category_id=None):
+        self.title = title
+        self.body = body
+        self.category_id = category_id
+        self.display_hash = uuid()
+    
     def __repr__(self):
         return '<Thread %r>' % (self.title)
+        
+    def url_title(self):
+        """ Method used to display a formatted version of the thread title, with spaces replaced by dashes."""
+        
+        return self.title.replace(' ', '-')
 
 
 class Post(db.Model):
@@ -70,6 +84,13 @@ class Post(db.Model):
     thread = relationship(Thread, backref='posts')
     display_hash = db.Column(db.String(255), nullable=False)
     display_name = db.Column(db.String(255), nullable=True)
+    
+    def __init__(self, body=None, thread_id=None, created_by=None, display_name='Tits McGee'):
+        self.body = body
+        self.thread_id = thread_id
+        self.display_hash = uuid()
+        self.created_by = created_by
+        self.display_name = display_name
     
     def __repr__(self):
         return '<Post %r>' % (self.date_created)

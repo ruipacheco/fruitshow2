@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>{{ thread.title }}</h1>
+{{ thread.body }}
+
+{% for post in thread.posts %}
+<p>{{ post.body }}</p>
+{% endfor %}
+
+<form method="POST" action="/post">
+	<input type="hidden" name="display_hash" value="{{ thread.display_hash }}" />
+	<strong>Write comment:</strong><br />
+	<textarea name="post_body" id="post_body"></textarea>
+	<br />
+	<strong>Display name</strong>
+	<br />
+	<input type="text" name="display_name" id="display_name" value="Tits McGee"/>
+	<br />
+	<input type="submit" name="submit" id="submit" value="Post" />
+</form>
+
+{% endblock %}

@@ -1,5 +1,11 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
+<a href="/thread">New Thread</a>
+<h1>All Threads</h1>
+<ul>
+{% for thread in threads %}
+	<li><a href="/thread/{{ thread.display_hash }}/{{ thread.url_title() }}">{{ thread.title }}</a></li>
+{% endfor %}
+</ul>
 {% endblock %}
