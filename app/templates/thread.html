@@ -6,7 +6,9 @@
 {{ thread.body }}
 
 {% for post in thread.posts %}
-<p>{{ post.body }}</p>
+	{% if not post.spam %}
+		<p>{{ post.body }}</p>
+	{% endif %}
 {% endfor %}
 
 <form method="POST" action="/post">

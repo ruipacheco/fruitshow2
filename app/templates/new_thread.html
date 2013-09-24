@@ -1,18 +1,33 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<form name="new_post" method="POST" action="/create_thread">
-	<select name="category_id" id="category_id">
+
+{% if form.errors %}
+    <ul class="errors">
+        {% for field_name, field_errors in form.errors|dictsort if field_errors %}
+            {% for error in field_errors %}
+                <li>{{ form[field_name].label }}: {{ error }}</li>
+            {% endfor %}
+        {% endfor %}
+    </ul>
+{% endif %}
+<form name="new_post" method="POST" action="/thread">
+	<p>
+		<select name="category_id" id="category_id">
 		{% for category in categories %}
-		<option value="{{ category.category_id }}">{{ category.title }}</option>
+			<option value="{{ category.category_id }}">{{ category.title }}</option>
 		{% endfor %}
-	</select>
-	<br />
-	<input type="text" name="title" id="title" /><br />
-	<textarea name="body" id="body"></textarea>
-	<br />
-	<input type="text" name="display_name" id="display_name" value="Tits McGee"/>
-	<br />
+		</select>
+	</p>
+	<p>
+		{{ form.title.label }}:<br /> 
+		{{ form.title|safe }}
+	</p>
+	<p>
+		{{ form.body.label }}<br />
+		{{ form.body|safe }}
+	</p>
 	<input type="submit" name="save" id="save" title="Save" />
 </form>
+
 {% endblock %}

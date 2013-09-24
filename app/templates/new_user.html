@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form name="new_post" method="POST" action="/create_user">
+	<label>Username <input type="text" name="username" id="username" /></label>
+	<br />
+	<label>Password <input type="password" name="password" id="password" /></label>
+	<br />
+	<label>Email <input type="text" name="email" id="email" /></label>
+	<br />
+	<label>Is Admin <input type="checkbox" name="is_admin" id="is_admin" /></label>
+	<input type="submit" name="save" id="save" title="Save" />
+</form>
+{% endblock %}
