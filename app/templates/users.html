@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 
-<p><a href="/new_user">New User</a></p>
-
 {% block content %}
+<p><a href="/user">New User</a></p>
 <ul>
 	{% for user in users %}
-		<li><a href="/user/{{ user.display_hash }}/">{{ user.username }}</a></li>
+		<li><a href="/user/{{ user.display_hash }}">{{ user.username }}</a></li>
 	{% endfor %}
 </ul>
+
 {% endblock %}

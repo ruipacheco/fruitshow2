@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% if form.errors %}
+    <ul class="errors">
+        {% for field_name, field_errors in form.errors|dictsort if field_errors %}
+            {% for error in field_errors %}
+                <li>{{ form[field_name].label }}: {{ error }}</li>
+            {% endfor %}
+        {% endfor %}
+    </ul>
+{% endif %}
+<form name="new_post" method="POST" action="/user">
+	{{ form.display_hash()|safe }}
+	<p>{{ form.username.label }}: {{ form.username()|safe }}</p>
+	<p>{{ form.password.label }}: {{ form.password()|safe }}</p>
+	<p>{{ form.email.label }}: {{ form.email()|safe }}</p>
+	<p>{{ form.is_admin.label }}: {{ form.is_admin()|safe }}</p>
+	<input type="submit" name="save" id="save" title="Save" />
+</form>
+{% endblock %}

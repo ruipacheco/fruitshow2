@@ -11,15 +11,21 @@
 	{% endif %}
 {% endfor %}
 
-<form method="POST" action="/post">
+{% if form.errors %}
+    <ul class="errors">
+        {% for field_name, field_errors in form.errors|dictsort if field_errors %}
+            {% for error in field_errors %}
+                <li>{{ form[field_name].label }}: {{ error }}</li>
+            {% endfor %}
+        {% endfor %}
+    </ul>
+{% endif %}
+<form method="POST" action="/thread/{{ thread.display_hash }}/{{ thread.url_title() }}">
 	<input type="hidden" name="display_hash" value="{{ thread.display_hash }}" />
-	<strong>Write comment:</strong><br />
-	<textarea name="post_body" id="post_body"></textarea>
-	<br />
-	<strong>Display name</strong>
-	<br />
-	<input type="text" name="display_name" id="display_name" value="Tits McGee"/>
-	<br />
+	{{ form.body.label }}:<br />
+	{{ form.body|safe }}<br />
+	{{ form.display_name.label }}<br />
+	{{ form.display_name|safe }}<br />
 	<input type="submit" name="submit" id="submit" value="Post" />
 </form>
 
