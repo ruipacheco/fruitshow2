@@ -97,20 +97,86 @@ textarea {
    Author's custom styles
    ========================================================================== */
 
+html {
+	background-color:#ECF0F1;
+	font-family:Helvetica;
+}
 
+a {
+	text-decoration:none;
+}
 
+body {
+	padding-left:50px;
+	padding-right:50px;
+}
 
+.btn {
+	border: 0px none;
+	border-radius: 3px 3px 3px 3px;
+	padding: 0.9em 1.8em 0.8em;
+	box-shadow: none;
+	line-height: 1;
+	font-weight: bold;
+	text-shadow: none;
+	width: 50%;
+	padding-left:10px;
+	padding-right:10px;
+	text-align:center;
+}
 
+.conversation {
+	background-color:#C0392B;
+}
 
+a {
+	color:white;
+}
 
+.content {
+	float:right;
+	width:70%;
+	padding:0;
+	margin:0;
+}
 
+.sidebar {
+	float:left;
+	width:30%;
+}
 
+.thread {
+	border: 0px none;
+	border-radius: 3px 3px 3px 3px;
+	padding-top:0.5em;
+	padding-left:0.8em;
+	padding-bottom:0.3em;
+	box-shadow: none;
+	float:left;
+	background-color:#BDC3C7;
+	font-weight:bold;
+	line-height:1;
+	font-weight:bold;
+	text-shadow:none;
+	width:75%;
+	margin-bottom:10px;
+}
 
+.thread a:visited {
+	color:#7F8C8D;
+}
 
+.title {
+	margin-bottom:0.3em;
+}
 
-
-
-
+.details {
+	font-size:10px;
+	width:75%;
+	float:left;
+	font-weight:normal;
+	color:#7F8C8D;
+}
 
 
 /* ==========================================================================

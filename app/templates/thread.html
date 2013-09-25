@@ -20,7 +20,7 @@
         {% endfor %}
     </ul>
 {% endif %}
-<form method="POST" action="/thread/{{ thread.display_hash }}/{{ thread.url_title() }}">
+<form method="POST" action="{{ url_for('new_thread') }}/{{ thread.display_hash }}/{{ thread.url_title() }}">
 	<input type="hidden" name="display_hash" value="{{ thread.display_hash }}" />
 	{{ form.body.label }}:<br />
 	{{ form.body|safe }}<br />

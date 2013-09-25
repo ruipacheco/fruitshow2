@@ -14,10 +14,6 @@ class CategoryForm(ModelForm):
     def populated_object(self):
         """ Returns a new model object populated with the form values. """
         
-        print '###'
-        print model
-        print '###'
-        
         category = Category()
         self.populate_obj(category)
         return category
@@ -32,6 +28,9 @@ class UserForm(ModelForm):
     def populated_object(self):
         """ Returns a new model object populated with the form values. """
         
+        #import ipdb; ipdb.set_trace()
+        
+        #user = self.Meta.model
         user = User()
         self.populate_obj(user)
         return user

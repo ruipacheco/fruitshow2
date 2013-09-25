@@ -11,12 +11,13 @@
         {% endfor %}
     </ul>
 {% endif %}
-<form name="new_post" method="POST" action="/user">
+<form name="new_post" method="POST" action="{{ url_for('user') }}">
 	{{ form.display_hash()|safe }}
 	<p>{{ form.username.label }}: {{ form.username()|safe }}</p>
 	<p>{{ form.password.label }}: {{ form.password()|safe }}</p>
 	<p>{{ form.email.label }}: {{ form.email()|safe }}</p>
 	<p>{{ form.is_admin.label }}: {{ form.is_admin()|safe }}</p>
+	<p>{{ form.is_deleted.label }}: {{ form.is_deleted()|safe }}</p>
 	<input type="submit" name="save" id="save" title="Save" />
 </form>
 {% endblock %}

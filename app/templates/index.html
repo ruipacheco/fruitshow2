@@ -1,12 +1,22 @@
 {% extends 'base.html' %}
 
-{% block content %}
-<a href="/thread">New Thread</a>
+{% block sidebar %}
+{% endblock %}
 
-<h1>All Threads</h1>
-<ul>
-	{% for thread in threads %}
-		<li><a href="/thread/{{ thread.display_hash }}/{{ thread.url_title() }}">{{ thread.title }}</a></li>
-	{% endfor %}
-</ul>
+{% block content %}
+
+{% for thread in threads %}
+	<div class="thread">
+		<div class="title">
+			<a href="{{ url_for('new_thread') }}/{{ thread.display_hash|safe }}/{{ thread.url_title()|safe }}#count={{ thread.posts|count() }}">{{ thread.title }}</a>
+		</div>
+		<div class="clearfix"></div>
+		<div class="details">
+			<div class="detail">{{ thread.posts|count() }} Posts</div>
+			<div class="clearfix"></div>
+		</div>
+		<div class="clearfix"></div>
+	</div>
+{% endfor %}
+
 {% endblock %}

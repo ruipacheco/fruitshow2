@@ -5,6 +5,9 @@ from flask import render_template, request, redirect, url_for
 from models import *
 from forms import *
 
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
 
 @app.route('/')
 @app.route('/index')
@@ -50,7 +53,7 @@ def thread(display_hash=None, title=None):
         form = PostForm(request.form)
         
         if form.validate():
-            thread = get_thread_by_hash(display_hash=request.form['display_hash'])
+            thread = get_thread_by_hash(display_hash=form.display_hash.data)
             #TODO Set error if thread is not set
             if thread:
                 post = form.populated_object()
@@ -60,11 +63,13 @@ def thread(display_hash=None, title=None):
       
     if request.method == 'GET':
         if display_hash is None:
-            return render_template('404.html')
+            abort(404)
     
         form = PostForm()
     
     thread = get_thread_by_hash(display_hash=display_hash)
+    if not thread:
+        abort(404)
     return render_template('thread.html', thread=thread, form=form)
 
 
@@ -78,10 +83,9 @@ def users():
 
 @app.route('/user', methods=['GET', 'POST'])
 @app.route('/user/<string:display_hash>', methods=['GET'])
-def user(display_hash=None):
+def user(display_hash=None, action=None):
     """ Create or edit a user. """
     
-    import ipdb; ipdb.set_trace()
     if request.method == 'POST':
         form = UserForm(request.form)
         
@@ -107,6 +111,8 @@ def user(display_hash=None):
     if request.method == 'GET':
         if display_hash:
             user = User.query.filter(User.display_hash==display_hash).first()
+            if not user:
+                abort(404)
             form = UserForm(obj=user)
         else:
             form = UserForm()

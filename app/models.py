@@ -11,13 +11,12 @@ from datetime import datetime
 import uuid
 from uuid import uuid4
 
-from wtforms import widgets
-
 
 def custom_uuid():
-    """ Generates a unique random numeric UUID """
+    """ Generates a unique random numeric UUID. """
     
     return hash(str(uuid.uuid1())) % 1000000
+
 
 class Category(db.Model):
 
@@ -26,6 +25,7 @@ class Category(db.Model):
     category_id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.Unicode(255), nullable=False)
     date_created = db.Column(db.DateTime, nullable=False, default=datetime.now())
+    color = db.Column(db.Unicode(50), nullable=True)
     
     def __repr__(self):
         return u'<Category %r>' % (self.title)
@@ -36,7 +36,7 @@ class User(db.Model):
     __tablename__ = 'User'
 
     user_id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.Unicode(255), nullable=False, unique=True)
+    username = db.Column(db.Unicode(255), nullable=False)
     password = db.Column(PasswordType(schemes=['pbkdf2_sha512']), nullable=False)
     display_hash = db.Column(db.String(255), nullable=False, unique=True)
     date_created = db.Column(db.DateTime, nullable=False, default=datetime.now())
@@ -44,6 +44,7 @@ class User(db.Model):
     email = db.Column(EmailType, nullable=False)
     is_admin = db.Column(db.Boolean, nullable=False, default=False)
     is_deleted = db.Column(db.Boolean, nullable=False, default=False)
+    icon = db.Column(db.String(255), nullable=True)
     
     def __init__(self, username=None, password=None, email=None):
         self.username=username

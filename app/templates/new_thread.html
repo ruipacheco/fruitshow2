@@ -11,7 +11,7 @@
         {% endfor %}
     </ul>
 {% endif %}
-<form name="new_post" method="POST" action="/thread">
+<form name="new_post" method="POST" action="{{ url_for('new_thread') }}">
 	<p>
 		<select name="category_id" id="category_id">
 		{% for category in categories %}
