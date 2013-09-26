@@ -3,7 +3,7 @@
 {% block content %}
 
 <div class="conversation">
-	<div class="topic">
+	<div class="topic white">
 		<div class="topic_title">{{ thread.title|safe }}</div>
 		<div class="clearfix"></div>
 		<div class="topic_body">
@@ -11,7 +11,7 @@
 		</div>
 		<div class="clearfix"></div>
 		
-		<div class="details">
+		<div class="details details_thread">
 			<div class="detail large">
 				{% if thread.created_by %}
 					{{ thread.user.username|safe }}
@@ -36,7 +36,8 @@
 				{{ post.body|safe }}
 				<div class="clearfix"></div>
 			</div>
-			<div class="details">
+			<div class="clearfix"></div>
+			<div class="details details_thread">
 				<div class="detail large">
 					{% if post.created_by %}
 						{{ post.user.username|safe }}
@@ -56,40 +57,26 @@
 		{% endif %}
 	{% endfor %}
 	<div class="clearfix"></div>
+	{% if form.errors %}
+	    <ul class="errors">
+	        {% for field_name, field_errors in form.errors|dictsort if field_errors %}
+	            {% for error in field_errors %}
+	                <li>{{ form[field_name].label }}: {{ error }}</li>
+	            {% endfor %}
+	        {% endfor %}
+	    </ul>
+	{% endif %}
 	<div class="comment">
 		<form method="POST" action="{{ url_for('new_thread') }}/{{ thread.display_hash|safe }}/{{ thread.url_title()|safe }}">
-			<textarea cols="80">
-				{{ form.body.data|safe }}
-			</textarea>
+			<input type="hidden" name="display_hash" value="{{ thread.display_hash }}" />
+			{{ form.body(rows='10')|safe }}
 			<p>{{ form.display_name|safe }}</p>
 			<div class="clearfix"></div>
-			<div class="btn save">
-				<a href="{{ url_for('new_thread') }}">Add Comment</a>
-			</div>
+			<button class="save">Add Comment</button>
 		</form>
+		<div class="clearfix"></div>
 	</div>
+	<div class="clearfix"></div>
 </div>
-
-<div class="clearfix"></div>
-<hr />
-<h2>{{ thread.title }}</h2>
-
-{% if form.errors %}
-    <ul class="errors">
-        {% for field_name, field_errors in form.errors|dictsort if field_errors %}
-            {% for error in field_errors %}
-                <li>{{ form[field_name].label }}: {{ error }}</li>
-            {% endfor %}
-        {% endfor %}
-    </ul>
-{% endif %}
-<form method="POST" action="{{ url_for('new_thread') }}/{{ thread.display_hash }}/{{ thread.url_title() }}">
-	<input type="hidden" name="display_hash" value="{{ thread.display_hash }}" />
-	{{ form.body.label }}:<br />
-	{{ form.body|safe }}<br />
-	{{ form.display_name.label }}<br />
-	{{ form.display_name|safe }}<br />
-	<input type="submit" name="submit" id="submit" value="Post" />
-</form>
 
 {% endblock %}

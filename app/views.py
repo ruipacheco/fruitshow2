@@ -5,9 +5,11 @@ from flask import render_template, request, redirect, url_for
 from models import *
 from forms import *
 
+
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html'), 404
+
 
 @app.route('/')
 @app.route('/index')
@@ -32,7 +34,7 @@ def new_thread():
             db.session.add(thread)
             db.session.commit()
             
-            return redirect('/thread/' + thread.display_hash + '/' + thread.url_title())
+            return redirect(url_for('thread'), display_hash=thread.display_hash, title=thread.url_title())
             
     if request.method == 'GET':
         form = ThreadForm()
@@ -53,19 +55,24 @@ def thread(display_hash=None, title=None):
         form = PostForm(request.form)
         
         if form.validate():
-            thread = get_thread_by_hash(display_hash=form.display_hash.data)
-            #TODO Set error if thread is not set
-            if thread:
-                post = form.populated_object()
-                post.thread_id = thread.thread_id
-                db.session.add(post)
-                db.session.commit()
+            thread = get_thread_by_hash(display_hash=request.form['display_hash'])
+            if not thread:
+                abort(404)
+                
+            post = form.populated_object()
+            post.thread_id = thread.thread_id
+            db.session.add(post)
+            db.session.commit()
+            
+            anchor = 'p' + str(post.post_id)
+            return redirect(url_for('thread', display_hash=thread.display_hash, title=thread.url_title(), _anchor=anchor))
       
     if request.method == 'GET':
         if display_hash is None:
             abort(404)
             
         form = PostForm()
+        
     thread = get_thread_by_hash(display_hash=display_hash)
     if not thread:
         abort(404)

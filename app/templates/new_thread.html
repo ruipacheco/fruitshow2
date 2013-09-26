@@ -2,32 +2,34 @@
 
 {% block content %}
 
-{% if form.errors %}
-    <ul class="errors">
-        {% for field_name, field_errors in form.errors|dictsort if field_errors %}
-            {% for error in field_errors %}
-                <li>{{ form[field_name].label }}: {{ error }}</li>
-            {% endfor %}
-        {% endfor %}
-    </ul>
-{% endif %}
-<form name="new_post" method="POST" action="{{ url_for('new_thread') }}">
-	<p>
-		<select name="category_id" id="category_id">
-		{% for category in categories %}
-			<option value="{{ category.category_id }}">{{ category.title }}</option>
-		{% endfor %}
-		</select>
-	</p>
-	<p>
-		{{ form.title.label }}:<br /> 
-		{{ form.title|safe }}
-	</p>
-	<p>
-		{{ form.body.label }}<br />
-		{{ form.body|safe }}
-	</p>
-	<input type="submit" name="save" id="save" title="Save" />
-</form>
+<div class="conversation padding white">
+	{% if form.errors %}
+	    <ul class="errors">
+	        {% for field_name, field_errors in form.errors|dictsort if field_errors %}
+	            {% for error in field_errors %}
+	                <li>{{ form[field_name].label }}: {{ error }}</li>
+	            {% endfor %}
+	        {% endfor %}
+	    </ul>
+	{% endif %}
+	<form name="new_post" method="POST" action="{{ url_for('new_thread') }}">
+		<p>
+			<select name="category_id" id="category_id">
+			{% for category in categories %}
+				<option value="{{ category.category_id }}">{{ category.title }}</option>
+			{% endfor %}
+			</select>
+		</p>
+		<p>
+			{{ form.title.label }}:<br /> 
+			{{ form.title|safe }}
+		</p>
+		<p>
+			{{ form.body.label }}<br />
+			{{ form.body(rows='10')|safe }}
+		</p>
+		<button class="save">Save Conversation</button>
+	</form>
+</div>
 
 {% endblock %}
