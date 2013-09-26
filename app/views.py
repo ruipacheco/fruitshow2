@@ -64,12 +64,12 @@ def thread(display_hash=None, title=None):
     if request.method == 'GET':
         if display_hash is None:
             abort(404)
-    
+            
         form = PostForm()
-    
     thread = get_thread_by_hash(display_hash=display_hash)
     if not thread:
         abort(404)
+        
     return render_template('thread.html', thread=thread, form=form)
 
 

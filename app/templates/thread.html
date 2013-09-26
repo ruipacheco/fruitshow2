@@ -2,14 +2,77 @@
 
 {% block content %}
 
-<h1>{{ thread.title }}</h1>
-{{ thread.body }}
+<div class="conversation">
+	<div class="topic">
+		<div class="topic_title">{{ thread.title|safe }}</div>
+		<div class="clearfix"></div>
+		<div class="topic_body">
+			{{ thread.body|safe }}
+		</div>
+		<div class="clearfix"></div>
+		
+		<div class="details">
+			<div class="detail large">
+				{% if thread.created_by %}
+					{{ thread.user.username|safe }}
+				{% else %}
+					{{ thread.display_name|safe }}
+				{% endif %}
+			</div>
+			<div class="detail large">
+				{{ thread.date_created|safe }}
+			</div>
+			<div class="detail">
+				{{ thread.category.title|safe }}
+			</div>
+			<div class="clearfix"></div>
+		</div>
+		<div class="clearfix"></div>
+	</div>
+	<div class="clearfix"></div>
+	{% for post in thread.posts %}
+		{% if not post.spam %}
+			<div class="comment" id="p{{ post.post_id }}">
+				{{ post.body|safe }}
+				<div class="clearfix"></div>
+			</div>
+			<div class="details">
+				<div class="detail large">
+					{% if post.created_by %}
+						{{ post.user.username|safe }}
+					{% else %}
+						{{ post.display_name|safe }}
+					{% endif %}
+				</div>
+				<div class="detail large">
+					{{ post.date_created|safe }}
+				</div>
+				<div class="detail">
+					<a href="{{ url_for('new_thread') }}/{{ thread.display_hash|safe }}/{{ thread.url_title()|safe }}#p{{ post.post_id|safe }}">Permalink</a>
+				</div>
+				<div class="clearfix"></div>
+			</div>
+			<div class="clearfix"></div>
+		{% endif %}
+	{% endfor %}
+	<div class="clearfix"></div>
+	<div class="comment">
+		<form method="POST" action="{{ url_for('new_thread') }}/{{ thread.display_hash|safe }}/{{ thread.url_title()|safe }}">
+			<textarea cols="80">
+				{{ form.body.data|safe }}
+			</textarea>
+			<p>{{ form.display_name|safe }}</p>
+			<div class="clearfix"></div>
+			<div class="btn save">
+				<a href="{{ url_for('new_thread') }}">Add Comment</a>
+			</div>
+		</form>
+	</div>
+</div>
 
-{% for post in thread.posts %}
-	{% if not post.spam %}
-		<p>{{ post.body }}</p>
-	{% endif %}
-{% endfor %}
+<div class="clearfix"></div>
+<hr />
+<h2>{{ thread.title }}</h2>
 
 {% if form.errors %}
     <ul class="errors">

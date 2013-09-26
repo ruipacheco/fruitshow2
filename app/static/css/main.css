@@ -97,8 +97,11 @@ textarea {
    Author's custom styles
    ========================================================================== */
 
+/* Skeleton */
+
 html {
-	background-color:#ECF0F1;
+	/*background-color:#ECF0F1;*/
+	background-color:rgb(220, 225, 226);
 	font-family:Helvetica;
 }
 
@@ -125,8 +128,13 @@ body {
 	text-align:center;
 }
 
-.conversation {
+.highlighted {
 	background-color:#C0392B;
+}
+
+.save {
+	background-color:#2980B9;
+	width:20%;
 }
 
 a {
@@ -135,21 +143,33 @@ a {
 
 .content {
 	float:right;
-	width:70%;
+	width:69%;
 	padding:0;
 	margin:0;
+	background-color:yellow;
 }
 
 .sidebar {
 	float:left;
-	width:30%;
+	width:29%;
+	background-color:green;
 }
+
+input, textarea {
+	border:2px solid rgb(236, 240, 241);
+	/*padding: 5px 5px 5px;*/
+	padding:0.2em 0.2em 0.2em;
+	color:#7F8C8D;
+}
+
+/* /Skeleton */
+
+/* Thread list */
 
 .thread {
 	border: 0px none;
 	border-radius: 3px 3px 3px 3px;
 	padding-top:0.5em;
-	padding-left:0.8em;
 	padding-bottom:0.3em;
 	box-shadow: none;
 	float:left;
@@ -158,7 +178,7 @@ a {
 	line-height:1;
 	font-weight:bold;
 	text-shadow:none;
-	width:75%;
+	width:100%;
 	margin-bottom:10px;
 }
 
@@ -167,17 +187,77 @@ a {
 }
 
 .title {
-	margin-bottom:0.3em;
+	margin-bottom:5px;
+	padding-left:0.8em;
 }
 
 .details {
-	font-size:10px;
-	width:75%;
-	float:left;
+	background-color:#BDC3C7;
+	padding-left:1.2em;
+	font-size:12px;
 	font-weight:normal;
+	color:#2980B9;
+	border-radius: 0 0 3px 3px;
+}
+
+.detail {
+	padding-top:0.2em;
+	padding-bottom:0.2em;
+	width:20%;
+	float:left;
+}
+
+.large {
+	width:30%;
+}
+
+.medium {
+	width:20%;
+	background-color:yellow;
+}
+
+.small {
+	width:15%;
+}
+
+/* /Thread list */
+
+/* Thread page */
+
+.conversation {
+	float:left;
+}
+
+.topic {
+	float:left;
+	border-radius:3px 3px 3px 3px;
+	background-color:white;
+	margin-bottom:10px;
+}
+
+.topic_title {
+	border-radius:3px 3px 0 0;
+	background-color:#3498DB;
+	color:white;
+	font-size:2em;
+	padding:0.2em 10px 0.8em;
+	padding: 0.6em 0.5em 0.5em;
+}
+
+.topic_body {
+	padding-left:0.8em;
 	color:#7F8C8D;
 }
 
+.comment {
+	border-radius: 3px 3px 3px 3px;
+	margin-top:20px;
+	background-color:white;
+	padding:0.5em;
+	color:#7F8C8D;
+}
+
+/* /Thread & Post page */
 
 /* ==========================================================================
    Helper classes
