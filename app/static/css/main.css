@@ -114,7 +114,7 @@ body {
 	padding-right:50px;
 }
 
-.btn {
+button, .btn {
 	border: 0px none;
 	border-radius: 3px 3px 3px 3px;
 	padding: 0.9em 1.8em 0.8em;
@@ -126,6 +126,7 @@ body {
 	padding-left:10px;
 	padding-right:10px;
 	text-align:center;
+	color:white;
 }
 
 .highlighted {
