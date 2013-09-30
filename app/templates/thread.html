@@ -37,7 +37,7 @@
 			{{ form.body(cols='80', rows='10') }}
 			{{ form.display_name }}
 			<button type="submit" class="pure-button pure-button-success">Add Comment</button>
-			<button type="reset" class="pure-button pure-button-error">Cancel</button>
+			<a href="{{ url_for('index') }}" class="pure-button pure-button-error">Cancel</a>
 		</fieldset>
 	</form>
 {% endblock %}

@@ -14,7 +14,6 @@ header, section, footer, aside, nav, article, figure {
 dt {
 	font-weight:bold;
 	display:block;
-	margin-bottom:5px;
 }
 
 dd {
@@ -32,8 +31,16 @@ article {
 	border-bottom:1px solid #eee;
 }
 
+article a {
+	color:#3b8bba;
+}
+
 section {
 	margin-bottom:0.8em;
+}
+
+fieldset a:visited {
+	color:white !important;
 }
 
 .pure-button-success,
@@ -50,6 +57,7 @@ section {
 }
 
 .pure-button-error {
+	color:white;
     background: rgb(202, 60, 60); /* this is a maroon */
 }
 
@@ -61,8 +69,7 @@ section {
     background: rgb(66, 184, 221); /* this is a light blue */
 }
 
-#body a {
-	color:#3b8bba;
+a {
 	text-decoration:none;
 }
 
@@ -104,7 +111,6 @@ section {
 }
 
 #create-post {
-	/*padding:1em 2em;*/
 	margin-top:2em;
 }
 
