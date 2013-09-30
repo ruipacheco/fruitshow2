@@ -1,82 +1,43 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
-<div class="conversation">
-	<div class="topic white">
-		<div class="topic_title">{{ thread.title|safe }}</div>
-		<div class="clearfix"></div>
-		<div class="topic_body">
-			{{ thread.body|safe }}
-		</div>
-		<div class="clearfix"></div>
-		
-		<div class="details details_thread">
-			<div class="detail large">
-				{% if thread.created_by %}
-					{{ thread.user.username|safe }}
-				{% else %}
-					{{ thread.display_name|safe }}
-				{% endif %}
-			</div>
-			<div class="detail large">
-				{{ thread.date_created|safe }}
-			</div>
-			<div class="detail">
-				{{ thread.category.title|safe }}
-			</div>
-			<div class="clearfix"></div>
-		</div>
-		<div class="clearfix"></div>
-	</div>
-	<div class="clearfix"></div>
+	<article>
+		<header>
+			<h2>{{ thread.title|safe }}</h2>
+		</header>
+		{{ thread.body|safe }}
+		<footer>
+			<time pubdate="pubdate">{{ thread.date_created|safe }}</time>&nbsp;|&nbsp;
+			<strong>{{ thread.display_name|safe }}</strong>
+		</footer>
+	</article>
 	{% for post in thread.posts %}
 		{% if not post.spam %}
-			<div class="comment" id="p{{ post.post_id }}">
-				{{ post.body|safe }}
-				<div class="clearfix"></div>
-			</div>
-			<div class="clearfix"></div>
-			<div class="details details_thread">
-				<div class="detail large">
-					{% if post.created_by %}
-						{{ post.user.username|safe }}
-					{% else %}
-						{{ post.display_name|safe }}
-					{% endif %}
-				</div>
-				<div class="detail large">
-					{{ post.date_created|safe }}
-				</div>
-				<div class="detail">
-					<a href="{{ url_for('new_thread') }}/{{ thread.display_hash|safe }}/{{ thread.url_title()|safe }}#p{{ post.post_id|safe }}">Permalink</a>
-				</div>
-				<div class="clearfix"></div>
-			</div>
-			<div class="clearfix"></div>
+	<article id="p{{ post.post_id }}">
+		{{ post.body|safe }}
+		<footer>
+			<time pubdate="pubdate">{{ post.date_created|safe }}</time>&nbsp;|&nbsp;
+			{{ post.display_name|safe }}
+		</footer>
+	</article>
 		{% endif %}
 	{% endfor %}
-	<div class="clearfix"></div>
-	{% if form.errors %}
-	    <ul class="errors">
-	        {% for field_name, field_errors in form.errors|dictsort if field_errors %}
-	            {% for error in field_errors %}
-	                <li>{{ form[field_name].label }}: {{ error }}</li>
-	            {% endfor %}
-	        {% endfor %}
-	    </ul>
-	{% endif %}
-	<div class="comment">
-		<form method="POST" action="{{ url_for('new_thread') }}/{{ thread.display_hash|safe }}/{{ thread.url_title()|safe }}">
+	<form class="pure-form pure-form-stacked" method="POST" action="/thread/{{ thread.display_hash|safe }}/{{ thread.url_title()|safe }}">
+		{% if form.errors %}
+		    <ul>
+		        {% for field_name, field_errors in form.errors|dictsort if field_errors %}
+		            {% for error in field_errors %}
+		                <li>{{ form[field_name].label }}: {{ error }}</li>
+		            {% endfor %}
+		        {% endfor %}
+		    </ul>
+		{% endif %}
+		<fieldset>
 			<input type="hidden" name="display_hash" value="{{ thread.display_hash }}" />
-			{{ form.body(rows='10')|safe }}
-			<p>{{ form.display_name|safe }}</p>
-			<div class="clearfix"></div>
-			<button class="save">Add Comment</button>
-		</form>
-		<div class="clearfix"></div>
-	</div>
-	<div class="clearfix"></div>
-</div>
-
+			{{ form.body(cols='80', rows='10') }}
+			{{ form.display_name }}
+			<button type="submit" class="pure-button pure-button-success">Add Comment</button>
+			<button type="reset" class="pure-button pure-button-error">Cancel</button>
+		</fieldset>
+	</form>
 {% endblock %}

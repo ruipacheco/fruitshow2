@@ -1,23 +1,10 @@
 {% extends 'base.html' %}
 
-{% block sidebar %}
-{% endblock %}
-
 {% block content %}
-
-{% for thread in threads %}
-	<div class="thread">
-		<div class="title">
-			<a href="{{ url_for('new_thread') }}/{{ thread.display_hash|safe }}/{{ thread.url_title()|safe }}#p=">{{ thread.title|safe }}</a>
-		</div>
-		<div class="clearfix"></div>
-		<div class="details">
-			<div class="detail">{{ thread.posts|count() }} Posts</div>
-			<div class="clearfix"></div>
-		</div>
-		<div class="clearfix"></div>
-	</div>
-	<div class="clearfix"></div>
-{% endfor %}
-
+	<dl>
+		{% for thread in threads %}
+			<dt><a href="{{ url_for('new_thread') }}/{{ thread.display_hash|safe }}/{{ thread.url_title()|safe }}#p=">{{ thread.title|safe }}</a></dt>
+			<dd>{{ thread.posts|count() }} Posts | {{ thread.display_name|safe }}</dd>
+		{% endfor %}
+	</dl>
 {% endblock %}

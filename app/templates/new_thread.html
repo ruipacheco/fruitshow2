@@ -1,10 +1,9 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
-<div class="conversation padding white">
+<form class="pure-form pure-form-stacked">
 	{% if form.errors %}
-	    <ul class="errors">
+	    <ul>
 	        {% for field_name, field_errors in form.errors|dictsort if field_errors %}
 	            {% for error in field_errors %}
 	                <li>{{ form[field_name].label }}: {{ error }}</li>
@@ -12,24 +11,10 @@
 	        {% endfor %}
 	    </ul>
 	{% endif %}
-	<form name="new_post" method="POST" action="{{ url_for('new_thread') }}">
-		<p>
-			<select name="category_id" id="category_id">
-			{% for category in categories %}
-				<option value="{{ category.category_id }}">{{ category.title }}</option>
-			{% endfor %}
-			</select>
-		</p>
-		<p>
-			{{ form.title.label }}:<br /> 
-			{{ form.title|safe }}
-		</p>
-		<p>
-			{{ form.body.label }}<br />
-			{{ form.body(rows='10')|safe }}
-		</p>
-		<button class="save">Save Conversation</button>
-	</form>
-</div>
-
+	<fieldset>
+        <textarea></textarea>
+		<input type="text" placeholder="Anonymous Coward" />
+		<button type="submit" class="pure-button pure-button-primary">Sign in</button>
+	</fieldset>
+</form>
 {% endblock %}

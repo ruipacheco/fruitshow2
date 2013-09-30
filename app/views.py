@@ -50,6 +50,7 @@ def thread(display_hash=None, title=None):
     def get_thread_by_hash(display_hash=None):
         return Thread.query.filter(Thread.display_hash==display_hash).first()
     
+    import ipdb; ipdb.set_trace()
     form = None
     if request.method == 'POST':
         form = PostForm(request.form)
