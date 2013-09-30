@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<form class="pure-form pure-form-stacked">
+<form class="pure-form pure-form-stacked" method="POST" action="{{ url_for('user') }}">
 	{% if form.errors %}
 	    <ul>
 	        {% for field_name, field_errors in form.errors|dictsort if field_errors %}
@@ -12,7 +12,8 @@
 	    </ul>
 	{% endif %}
 	<fieldset>
-		<legend>User Data</legend>
+		{{ form.display_hash()|safe }}
+		<h2>User Data</h2>
 		<div class="pure-control-group">
         	<label>Username: {{ form.username }}</label>
 		</div>
