@@ -34,7 +34,7 @@ def new_thread():
             db.session.add(thread)
             db.session.commit()
             
-            return redirect(url_for('thread'), display_hash=thread.display_hash, title=thread.url_title())
+            return redirect(url_for('thread', display_hash=thread.display_hash, title=thread.url_title()))
             
     if request.method == 'GET':
         form = ThreadForm()
@@ -50,7 +50,6 @@ def thread(display_hash=None, title=None):
     def get_thread_by_hash(display_hash=None):
         return Thread.query.filter(Thread.display_hash==display_hash).first()
     
-    import ipdb; ipdb.set_trace()
     form = None
     if request.method == 'POST':
         form = PostForm(request.form)

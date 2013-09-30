@@ -22,7 +22,7 @@
 	</article>
 		{% endif %}
 	{% endfor %}
-	<form class="pure-form pure-form-stacked" method="POST" action="/thread/{{ thread.display_hash|safe }}/{{ thread.url_title()|safe }}">
+	<form class="pure-form pure-form-stacked" method="POST" action="{{ url_for('new_thread') }}/{{ thread.display_hash|safe }}/{{ thread.url_title()|safe }}">
 		{% if form.errors %}
 		    <ul>
 		        {% for field_name, field_errors in form.errors|dictsort if field_errors %}

@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<form class="pure-form pure-form-stacked">
+<form class="pure-form pure-form-stacked" method="POST" action="{{ url_for('new_thread') }}">
 	{% if form.errors %}
 	    <ul>
 	        {% for field_name, field_errors in form.errors|dictsort if field_errors %}
@@ -12,9 +12,16 @@
 	    </ul>
 	{% endif %}
 	<fieldset>
-        <textarea></textarea>
-		<input type="text" placeholder="Anonymous Coward" />
-		<button type="submit" class="pure-button pure-button-primary">Sign in</button>
+		<select name="category_id" id="category_id">
+		{% for category in categories %}
+			<option value="{{ category.category_id }}">{{ category.title }}</option>
+		{% endfor %}
+		</select>
+		{{ form.title }}
+		{{ form.body(cols='80', rows='10') }}
+		{{ form.display_name }}
+		<button type="submit" class="pure-button pure-button-success">Add Comment</button>
+		<button type="reset" class="pure-button pure-button-error">Cancel</button>
 	</fieldset>
 </form>
 {% endblock %}
