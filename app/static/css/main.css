@@ -104,7 +104,8 @@ section {
 }
 
 #create-post {
-	margin-top:83px;
+	/*padding:1em 2em;*/
+	margin-top:2em;
 }
 
 .centered {

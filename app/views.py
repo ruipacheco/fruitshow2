@@ -125,3 +125,14 @@ def user(display_hash=None, action=None):
             form = UserForm()
             
     return render_template('user.html', form=form)
+    
+
+@app.route('/user/<string:display_hash>/conversations', methods=['GET'])
+def user_conversations(display_hash=None):
+    
+    if not display_hash:
+        abort(404)
+        
+    threads = Thread.query.filter(Thread.user.has(display_hash=display_hash))
+    return render_template('index.html', threads=threads)
+    
