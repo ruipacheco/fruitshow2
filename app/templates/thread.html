@@ -5,7 +5,7 @@
 		<header>
 			<h2>{{ thread.title|safe }}</h2>
 		</header>
-		{{ thread.body|replace('\n', '<br />')|safe }}
+		{{ thread.body|markdown|safe }}
 		<footer>
 			<time pubdate="pubdate">{{ thread.date_created|safe }}</time>&nbsp;|&nbsp;
 			<strong>{{ thread.display_name|safe }}</strong>
@@ -13,13 +13,13 @@
 	</article>
 	{% for post in thread.posts %}
 		{% if not post.spam %}
-	<article id="p{{ post.post_id }}">
-		{{ post.body|replace('\n', '<br />')|safe }}
-		<footer>
-			<time pubdate="pubdate">{{ post.date_created|safe }}</time>&nbsp;|&nbsp;
-			{{ post.display_name|safe }}
-		</footer>
-	</article>
+			<article id="p{{ post.post_id }}">
+				{{ post.body|markdown|safe }}
+				<footer>
+					<time pubdate="pubdate">{{ post.date_created|safe }}</time>&nbsp;|&nbsp;
+					{{ post.display_name|safe }}
+				</footer>
+			</article>
 		{% endif %}
 	{% endfor %}
 	<form class="pure-form pure-form-stacked" method="POST" action="{{ url_for('new_thread') }}/{{ thread.display_hash|safe }}/{{ thread.url_title()|safe }}">
