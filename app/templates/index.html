@@ -12,4 +12,9 @@
 			<dd>{{ thread.posts|count() }} Posts | {{ thread.display_name|safe }}</dd>
 		{% endfor %}
 	</dl>
+	<div style="width:100%; text-align:center; clear:both;">
+	{% if pagination.has_prev %}<a href="{{ url_for('index', page=pagination.prev_num) }}"><< Newer posts</a>{% else %}<< Newer posts{% endif %} 
+	&nbsp;|&nbsp;At {{ pagination.page }} of {{ pagination.pages }}&nbsp;|&nbsp;
+	{% if pagination.has_next %}<a href="{{ url_for('index', page=pagination.next_num) }}">Older posts >></a>{% else %}Older posts >>{% endif %}
+	</div>
 {% endblock %}

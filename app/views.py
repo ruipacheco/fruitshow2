@@ -5,6 +5,7 @@ from flask import render_template, request, redirect, url_for
 from sqlalchemy.sql import func
 from models import *
 from forms import *
+from config import POSTS_PER_PAGE
 
 import collections
 from collections import OrderedDict
@@ -17,16 +18,18 @@ def page_not_found(e):
 
 @app.route('/')
 @app.route('/index')
-def index():
+@app.route('/index/')
+@app.route('/index/<int:page>', methods = ['GET', 'POST'])
+def index(page=1):
     """ Lists all threads. """
     
     threads = OrderedDict()
-    all_threads = Thread.query.order_by(Thread.thread_id.desc()).filter(Thread.display_name!=None).all()
-    for thread in all_threads:
+    pagination = Thread.query.order_by(Thread.thread_id.desc()).filter(Thread.display_name!=None).paginate(page, POSTS_PER_PAGE, False)
+    for thread in pagination.items:
         post = db.session.query(func.max(Post.post_id)).filter(Post.thread_id==thread.thread_id).one()
         threads[thread] = post[0]
     
-    return render_template('index.html', threads=threads)
+    return render_template('index.html', threads=threads, pagination=pagination)
 
 
 @app.route('/thread', methods=['GET', 'POST'])
@@ -141,7 +144,13 @@ def user_conversations(display_hash=None):
     
     if not display_hash:
         abort(404)
-        
-    threads = Thread.query.filter(Thread.user.has(display_hash=display_hash))
+    
+    threads = OrderedDict()
+    pagination = Thread.query.order_by(Thread.thread_id.desc()).filter(Thread.user.has(display_hash=display_hash)).paginate(page, POSTS_PER_PAGE, False)
+    for thread in pagination.items:
+        post = db.session.query(func.max(Post.post_id)).filter(Post.thread_id==thread.thread_id).one()
+        threads[thread] = post[0]
+    
+    return render_template('index.html', threads=threads, pagination=pagination)
     return render_template('index.html', threads=threads)
     
