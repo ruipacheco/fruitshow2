@@ -28,6 +28,10 @@ footer {
 	font-size:0.7em;
 }
 
+code {
+	background-color:#ff9;
+}
+
 article {
 	margin-bottom:15px;
 	border-bottom:1px solid #eee;
