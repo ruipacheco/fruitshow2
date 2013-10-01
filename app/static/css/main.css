@@ -3,8 +3,8 @@ html, body {height: 100%;}
 body {
 	padding-left:0.5em;
 	padding-right:0.2em;
-	color:#777;
-	font-family:"proxima-nova", sans-serif;
+	color:rgb(62, 67, 73);
+	font-family:'Garamond', 'Georgia', serif;
 	line-height: 1.6em;
 	font-size: 1em;
 }
@@ -34,14 +34,15 @@ article {
 }
 
 article a {
-	color:#3b8bba;
+	color:rgb(0, 75, 107);
+	border-bottom:1px dotted rgb(0, 75, 107);
 }
 
 section {
 	margin-bottom:0.8em;
 }
 
-fieldset a:visited {
+a.pure-button {
 	color:white !important;
 }
 
@@ -75,8 +76,9 @@ a {
 	text-decoration:none;
 }
 
-#body a:visited {
-	color:#265778;
+#menu a {
+	color:rgb(68, 68, 68);
+	border-bottom:1px dotted rgb(153, 153, 153);
 }
 
 #content {
