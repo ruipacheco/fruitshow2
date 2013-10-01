@@ -21,7 +21,7 @@ def index():
     """ Lists all threads. """
     
     threads = OrderedDict()
-    all_threads = Thread.query.order_by(Thread.date_created.desc()).filter(Thread.display_name!=None).all()
+    all_threads = Thread.query.order_by(Thread.thread_id.desc()).filter(Thread.display_name!=None).all()
     for thread in all_threads:
         post = db.session.query(func.max(Post.post_id)).filter(Post.thread_id==thread.thread_id).one()
         threads[thread] = post[0]
