@@ -2,7 +2,6 @@
 
 from app import app
 from flask import render_template, request, redirect, url_for
-from sqlalchemy import desc
 from sqlalchemy.sql import func
 from models import *
 from forms import *
@@ -22,14 +21,10 @@ def index():
     """ Lists all threads. """
     
     threads = OrderedDict()
-    all_threads = Thread.query.filter(Thread.display_name!=None).all()
+    all_threads = Thread.query.order_by(Thread.date_created.desc()).filter(Thread.display_name!=None).all()
     for thread in all_threads:
         post = db.session.query(func.max(Post.post_id)).filter(Post.thread_id==thread.thread_id).one()
         threads[thread] = post[0]
-    
-    print '---'
-    print threads
-    print '---'
     
     return render_template('index.html', threads=threads)
 
