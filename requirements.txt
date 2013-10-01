@@ -16,3 +16,4 @@ yolk==0.4.3
 ipdb
 wtforms-alchemy==0.7.15
 flask-misaka==1.0.2
+micawber==0.3.0

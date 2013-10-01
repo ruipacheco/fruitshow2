@@ -5,7 +5,7 @@
 		<header>
 			<h2>{{ thread.title|safe }}</h2>
 		</header>
-		{{ thread.body|markdown|safe }}
+		{{ thread.body|oembed(urlize_all=False, maxwidth=800)|markdown|safe }}
 		<footer>
 			<time pubdate="pubdate">{{ thread.date_created|safe }}</time>&nbsp;|&nbsp;
 			<strong>{{ thread.display_name|safe }}</strong>
@@ -14,7 +14,7 @@
 	{% for post in thread.posts %}
 		{% if not post.spam %}
 			<article id="p{{ post.post_id }}">
-				{{ post.body|markdown|safe }}
+				{{ post.body|oembed(urlize_all=False, maxwidth=800)|markdown|safe }}
 				<footer>
 					<time pubdate="pubdate">{{ post.date_created|safe }}</time>&nbsp;|&nbsp;
 					{{ post.display_name|safe }}
