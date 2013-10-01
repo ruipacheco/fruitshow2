@@ -15,4 +15,4 @@ wsgiref==0.1.2
 yolk==0.4.3
 ipdb
 wtforms-alchemy==0.7.15
-flask-markdown==0.3
+flask-misaka==1.0.2
