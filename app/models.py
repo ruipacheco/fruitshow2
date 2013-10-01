@@ -88,7 +88,7 @@ class Thread(db.Model):
     
     def __init__(self, title=None, body=None, category_id=None, display_name=None):
         self.title = title
-        self.body = self.body = body.replace('\n', '<br />')
+        self.body = body
         self.category_id = category_id
         self.display_name=display_name
         self.display_hash = custom_uuid()
