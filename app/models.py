@@ -63,11 +63,11 @@ class User(db.Model):
     def update_from_model(self, model):
         """ Receives a model object, usually from a form, and updates the current object with it's values. """
         
-        self.username=model.username
-        self.password=model.password
-        self.email=model.email
-        self.is_admin=model.is_admin
-        self.is_deleted=model.is_deleted
+        self.username = model.username
+        self.password = model.password
+        self.email = model.email
+        self.is_admin = model.is_admin
+        self.is_deleted = model.is_deleted
 
 
 class Thread(db.Model):
@@ -88,7 +88,7 @@ class Thread(db.Model):
     
     def __init__(self, title=None, body=None, category_id=None, display_name=None):
         self.title = title
-        self.body = body
+        self.body = self.body = body.replace('\n', '<br />')
         self.category_id = category_id
         self.display_name=display_name
         self.display_hash = custom_uuid()

@@ -4,7 +4,11 @@
 	<h2>Conversations</h2>
 	<dl>
 		{% for thread in threads %}
-			<dt><a href="{{ url_for('new_thread') }}/{{ thread.display_hash|safe }}/{{ thread.url_title()|safe }}#p=">{{ thread.title|safe }}</a></dt>
+			{% if threads[thread] %}
+				<dt><a href="{{ url_for('new_thread') }}/{{ thread.display_hash|safe }}/{{ thread.url_title()|safe }}#p{{ threads[thread] }}">{{ thread.title|safe }}</a></dt>
+			{% else %}
+				<dt><a href="{{ url_for('new_thread') }}/{{ thread.display_hash|safe }}/{{ thread.url_title()|safe }}">{{ thread.title|safe }}</a></dt>
+			{% endif %}
 			<dd>{{ thread.posts|count() }} Posts | {{ thread.display_name|safe }}</dd>
 		{% endfor %}
 	</dl>

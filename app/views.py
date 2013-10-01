@@ -2,8 +2,13 @@
 
 from app import app
 from flask import render_template, request, redirect, url_for
+from sqlalchemy import desc
+from sqlalchemy.sql import func
 from models import *
 from forms import *
+
+import collections
+from collections import OrderedDict
 
 
 @app.errorhandler(404)
@@ -16,7 +21,16 @@ def page_not_found(e):
 def index():
     """ Lists all threads. """
     
-    threads = Thread.query.filter(Thread.display_name!=None).all()
+    threads = OrderedDict()
+    all_threads = Thread.query.filter(Thread.display_name!=None).all()
+    for thread in all_threads:
+        post = db.session.query(func.max(Post.post_id)).filter(Post.thread_id==thread.thread_id).one()
+        threads[thread] = post[0]
+    
+    print '---'
+    print threads
+    print '---'
+    
     return render_template('index.html', threads=threads)
 
 
