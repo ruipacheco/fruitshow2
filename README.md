@@ -1,10 +1,7 @@
 fruitshow
 =========
 
-This is a Python clone of the Fruit Show software forum, which is showing it's age.
+This is a web forum written in Python that aims to be a cross between [Fruit Show](http://sourceforge.net/projects/fruitshow/) and [Vanilla](http://vanillaforums.org/).
 
-http://sourceforge.net/projects/fruitshow/
-
-I suggest you use [virtualenv-burrito](https://github.com/brainsik/virtualenv-burrito) for development.
-
-To install, first the SQL file in your database server and then install dependencies using pip: `pip install -r requirements.txt`.
+It supports anonymous posting like Fruit Show, but also registered users like Vanilla with registration being done by invite only. Posts created by anonymous users are only viewed by 
+other anonymous users.
