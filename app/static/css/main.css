@@ -31,6 +31,7 @@ footer {
 article {
 	margin-bottom:15px;
 	border-bottom:1px solid #eee;
+	white-space: pre-line;
 }
 
 article a {
@@ -77,10 +78,6 @@ a {
 
 #body a:visited {
 	color:#265778;
-}
-
-#menu {
-	min-height:100%;
 }
 
 #content {
