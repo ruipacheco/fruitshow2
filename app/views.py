@@ -96,7 +96,7 @@ def thread(display_hash=None, title=None):
 def users():
     """ List all users. """
     
-    users = User.query.filter(User.is_deleted==False).all()
+    users = User.query.all()
     return render_template('users.html', users=users)
 
 

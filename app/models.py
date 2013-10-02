@@ -40,11 +40,7 @@ class User(db.Model):
     password = db.Column(PasswordType(schemes=['pbkdf2_sha512']), nullable=False)
     display_hash = db.Column(db.String(255), nullable=False, unique=True)
     date_created = db.Column(db.DateTime, nullable=False, default=datetime.now())
-    last_login = db.Column(db.DateTime, nullable=True)
     email = db.Column(EmailType, nullable=False)
-    is_admin = db.Column(db.Boolean, nullable=False, default=False)
-    is_deleted = db.Column(db.Boolean, nullable=False, default=False)
-    icon = db.Column(db.String(255), nullable=True)
     
     def __init__(self, username=None, password=None, email=None):
         self.username=username

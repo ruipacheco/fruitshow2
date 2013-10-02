@@ -23,14 +23,9 @@
 		<div class="pure-control-group">
 			<label>Email: {{ form.email }}</label>
 		</div>
-		<div class="pure-control-group">
-			<label>Icon: {{ form.icon }}</label>
-		</div>
 		 <div class="pure-controls">
-			 <label>Admin: {{ form.is_admin }}</label>
-			 <label>Deleted: {{ form.is_deleted }}</label>
-		
 			 <button type="submit" class="pure-button pure-button-success">Save</button>
+			 <a href="{{ url_for('users') }}" class="pure-button pure-button-error">Cancel</a>
 		</div>
 	</fieldset>
 </form>
