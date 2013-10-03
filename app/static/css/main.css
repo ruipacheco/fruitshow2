@@ -48,6 +48,12 @@ a.pure-button {
 	color:white !important;
 }
 
+footer a {
+	color:inherit !important;
+	text-decoration:none;
+	border:none;
+}
+
 .pure-button-success,
 .pure-button-error,
 .pure-button-warning,

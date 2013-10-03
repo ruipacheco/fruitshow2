@@ -26,12 +26,13 @@
 							{% if current_user.is_active() %}
 							<li><a href="{{ url_for('invite') }}"><i class="icon-envelope"></i>&nbsp;Invite other users</a></li>
 							{% endif %}
-							{% if current_user.is_active() and current_user.is_admin() %}
 							<li class="pure-menu-heading">Administration</li>
+							{% if current_user.is_active() and current_user.is_admin() %}
 					        <li><a href="{{ url_for('users') }}"><i class="icon-group"></i>&nbsp;Users</a></li>
+							{% endif %}
+							<li><a href="{{ url_for('me') }}" target="_blank"><i class="icon-user"></i>&nbsp;Me</a></li>
 							<li class="pure-menu-heading">Help</li>
 							<li><a href="http://daringfireball.net/projects/markdown/syntax" target="_blank">&nbsp;Markdown</a></li>
-							{% endif %}
 					    </ul>
 					</div>
 					<!--

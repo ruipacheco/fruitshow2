@@ -160,6 +160,14 @@ def accept_invite(display_hash=None):
 
 # Actions that require users to be logged in
 
+@app.route('/me')
+@login_required
+def me():
+    """ Display details of currently logged in user. """
+    
+    form = UserForm(obj=current_user)
+    return render_template('user.html', form=form)
+
 @app.route('/invite', methods=['GET', 'POST'])
 @login_required
 def invite():

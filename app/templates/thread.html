@@ -7,7 +7,8 @@
 		</header>
 		{{ thread.body|oembed(urlize_all=False, maxwidth=800)|markdown|safe }}
 		<footer>
-			<time pubdate="pubdate">{{ thread.date_created|safe }}</time>&nbsp;|&nbsp;
+			<a href="{{ url_for('thread', display_hash=thread.display_hash, title=thread.url_title()) }}"><i class="icon-anchor"></i></a>&nbsp;
+			<time pubdate="pubdate">{{ thread.date_created|safe }}</time>&nbsp;
 			{% if thread.user %}
 			<strong>{{ thread.user.username|safe }}</strong>
 			{% else %}
@@ -19,11 +20,10 @@
 		<article id="p{{ post.display_hash }}">
 			{{ post.body|oembed(urlize_all=False, maxwidth=800)|markdown|safe }}
 			<footer>
-				<time pubdate="pubdate">
-					<a href="{{ url_for('thread', display_hash=thread.display_hash, title=thread.url_title()) }}#p{{ post.display_hash|safe }}">
-						{{ post.date_created|safe }}
-					</a>
-				</time>&nbsp;|&nbsp;
+				<a href="{{ url_for('thread', display_hash=thread.display_hash, title=thread.url_title()) }}#p{{ post.display_hash|safe }}">
+					<i class="icon-anchor"></i>
+				</a>&nbsp;
+				<time pubdate="pubdate">{{ post.date_created|safe }}</time>&nbsp;
 				{% if post.user %}
 				{{ post.user.username|safe }}
 				{% else %}
