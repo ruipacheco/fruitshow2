@@ -13,13 +13,18 @@
 		<div class="pure-g-r">
 			<div class="pure-u-1-5">
 				<div id="menu">
-					
 					<div class="borderless pure-menu pure-menu-open">
 					    <ul>
 							<li><a href="{{ url_for('new_thread') }}">Start Conversation</a></li>
+							{% if current_user.is_active() %}
+							<li><a href="{{ url_for('user', display_hash=current_user.display_hash) }}">Edit Your Profile</a></li>
+							{% else %}
 							<li><a href="{{ url_for('login') }}">Login</a></li>
-							<li><a href="{{ url_for('invite') }}">Invite</a></li>
-							{% if current_user.is_admin() %}
+							{% endif %}
+							{% if current_user.is_active() %}
+							<li><a href="{{ url_for('invite') }}">Invite other users</a></li>
+							{% endif %}
+							{% if current_user.is_active() and current_user.is_admin() %}
 							<li class="pure-menu-heading">Administration</li>
 					        <li><a href="{{ url_for('users') }}">Users</a></li>
 							{% endif %}
@@ -37,7 +42,7 @@
 			<div class="pure-u-4-5">
 				<div id="content">
 					<div id="header">
-						<h1>Fruit Show</h1>
+						<h1><a href="/index">Fruit Show</a></h1>
 						You know you want it.
 					</div>
 					<div id="body">

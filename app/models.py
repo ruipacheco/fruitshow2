@@ -4,7 +4,7 @@ from app import db
 from sqlalchemy import Table, Column, Integer, ForeignKey
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy_utils import EmailType, PasswordType
-from config import SECURITY_PASSWORD_HASH, ADMINISTRATOR_ROLE, CITIZEN_ROLE
+from config import SECURITY_PASSWORD_HASH, ADMINISTRATOR_ROLE, CITIZEN_ROLE, DELETED_ROLE
 
 import datetime
 from datetime import datetime
@@ -92,7 +92,7 @@ class User(db.Model):
         self.last_login = datetime.now()
         
     def is_active(self):
-        return True
+        return not self.__role_exists(DELETED_ROLE)
         
     def is_authenticated(self):
         return True
