@@ -8,10 +8,10 @@
 		{{ thread.body|oembed(urlize_all=False, maxwidth=800)|markdown|safe }}
 		<footer>
 				{% if thread.user %}
-				<img src="{{ thread.user.email|gravatar }}" />
+				<a href="{{ url_for('user', display_hash=thread.user.display_hash, action=None) }}"><img src="{{ thread.user.email|gravatar }}" /></a>
 				&nbsp;
 				<div>
-					<strong>{{ thread.user.username|safe }}</strong>
+					<strong><a href="{{ url_for('user', display_hash=thread.user.display_hash, action=None) }}">{{ thread.user.username|safe }}</a></strong>
 				{% else %}
 				<div>
 					<strong>{{ thread.display_name|safe }}</strong>
