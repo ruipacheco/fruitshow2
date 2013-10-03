@@ -16,10 +16,14 @@
 		</footer>
 	</article>
 	{% for post in thread.posts %}
-		<article id="p{{ post.id }}">
+		<article id="p{{ post.display_hash }}">
 			{{ post.body|oembed(urlize_all=False, maxwidth=800)|markdown|safe }}
 			<footer>
-				<time pubdate="pubdate">{{ post.date_created|safe }}</time>&nbsp;|&nbsp;
+				<time pubdate="pubdate">
+					<a href="{{ url_for('thread', display_hash=thread.display_hash, title=thread.url_title()) }}#p{{ post.display_hash|safe }}">
+						{{ post.date_created|safe }}
+					</a>
+				</time>&nbsp;|&nbsp;
 				{% if post.user %}
 				{{ post.user.username|safe }}
 				{% else %}

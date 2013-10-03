@@ -126,7 +126,7 @@ def thread(display_hash=None, title=None):
             db.session.add(post)
             db.session.commit()
             
-            anchor = 'p' + str(post.id)
+            anchor = 'p' + str(post.display_hash)
             return redirect(url_for('thread', display_hash=thread.display_hash, title=thread.url_title(), _anchor=anchor))
       
     if request.method == 'GET':
