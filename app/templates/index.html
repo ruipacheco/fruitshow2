@@ -31,20 +31,6 @@
 		<li>&nbsp</li>
 		<li><small>{{ pagination.page }} of {{ pagination.pages }}</small></li>
 		<li>&nbsp</li>
-		<!--
-	    <li><a class="pure-button" href="#">1</a></li>
-	    <li><a class="pure-button pure-button-active" href="#">2</a></li>
-	    <li><a class="pure-button" href="#">3</a></li>
-	    <li><a class="pure-button" href="#">4</a></li>
-	    <li><a class="pure-button" href="#">5</a></li>
-		-->
 	    {% if pagination.has_next %}<li><a class="next" href="{{ url_for('index', page=pagination.next_num) }}">&#187;</a></li>{% endif %}
 	</ul>
-	<!--
-	<div style="width:100%; text-align:center; clear:both;">
-	{% if pagination.has_prev %}<a href="{{ url_for('index', page=pagination.prev_num) }}"><< Newer posts</a>{% else %}<< Newer posts{% endif %} 
-	&nbsp;|&nbsp;At {{ pagination.page }} of {{ pagination.pages }}&nbsp;|&nbsp;
-	{% if pagination.has_next %}<a >Older posts >></a>{% else %}Older posts >>{% endif %}
-	</div>
-	-->
 {% endblock %}

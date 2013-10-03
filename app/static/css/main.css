@@ -24,6 +24,7 @@ dd {
 footer {
 	padding-top:0.2em;
 	font-size:0.7em;
+	height:50px;
 }
 
 code {
@@ -32,7 +33,6 @@ code {
 
 article {
 	margin-bottom:15px;
-	border-bottom:1px solid #eee;
 }
 
 article a {
@@ -40,18 +40,30 @@ article a {
 	border-bottom:1px dotted rgb(0, 75, 107);
 }
 
+footer a {
+	text-align:center;
+	color:inherit !important;
+	text-decoration:none;
+	border:none;
+}
+
+footer img {
+	display:block;
+	float:left;
+	margin-right:0.5em;
+	height:50px;
+}
+
 section {
 	margin-bottom:0.8em;
 }
 
-a.pure-button {
-	color:white !important;
+a {
+	text-decoration:none;
 }
 
-footer a {
-	color:inherit !important;
-	text-decoration:none;
-	border:none;
+a.pure-button {
+	color:white !important;
 }
 
 .pure-button-success,
@@ -78,10 +90,6 @@ footer a {
 
 .pure-button-secondary {
     background: rgb(66, 184, 221); /* this is a light blue */
-}
-
-a {
-	text-decoration:none;
 }
 
 #menu div.borderless {
