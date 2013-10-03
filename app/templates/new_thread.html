@@ -12,16 +12,12 @@
 	    </ul>
 	{% endif %}
 	<fieldset>
-		<select name="category_id" id="category_id">
-		{% for category in categories %}
-			<option value="{{ category.id }}">{{ category.title }}</option>
-		{% endfor %}
-		</select>
 		{{ form.title }}
 		{{ form.body(cols='80', rows='10') }}
 		{% if not current_user.is_active() %}
 		{{ form.display_name }}
 		{% endif %}
+		<label>NSFW&nbsp;{{ form.nsfw }}</label>
 		<button type="submit" class="pure-button pure-button-success"><i class="icon-comment"></i>&nbsp;Add Comment</button>
 		<a href="{{ url_for('index') }}" class="pure-button pure-button-error">Cancel</a>
 	</fieldset>

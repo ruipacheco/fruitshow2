@@ -84,14 +84,14 @@ def new_thread():
     """ Used to create new threads for discussion. """
     
     if request.method == 'POST':
+        import ipdb; ipdb.set_trace()
         form = ThreadForm(request.form)
         
         if form.validate():
             thread = form.populated_object()
             if current_user.is_active():
-                form.display_name = None
+                thread.display_name = None
                 thread.user = current_user
-            thread.category_id = request.form['category_id']
             db.session.add(thread)
             db.session.commit()
             
@@ -100,8 +100,7 @@ def new_thread():
     if request.method == 'GET':
         form = ThreadForm()
     
-    categories = Category.query.all()
-    return render_template('new_thread.html', categories=categories, form=form)
+    return render_template('new_thread.html', form=form)
 
 
 @app.route('/thread/<string:display_hash>/<string:title>', methods=['GET', 'POST'])

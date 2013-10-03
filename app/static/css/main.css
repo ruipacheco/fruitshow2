@@ -67,6 +67,16 @@ a.pure-button {
 	color:white !important;
 }
 
+abbr.nsfw {
+	color: #ac3939;
+	font-size: x-small;
+	text-decoration: none;
+	padding: 0 2px;
+	border: 1px solid #d27979!important;
+	border-radius: 3px;
+	margin-bottom:5px
+}
+
 .pure-button-success,
 .pure-button-error,
 .pure-button-warning,

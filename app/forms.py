@@ -33,18 +33,6 @@ class InviteForm(ModelForm):
         return invite
 
 
-class CategoryForm(ModelForm):
-    class Meta:
-        model = Category
-
-    def populated_object(self):
-        """ Returns a new model object populated with the form values. """
-        
-        category = Category()
-        self.populate_obj(category)
-        return category
-
-
 class UserForm(ModelForm):
     class Meta:
         model = User

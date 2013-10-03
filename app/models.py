@@ -41,19 +41,6 @@ class Invite(db.Model):
         return u'<Invite %r>' % (self.display_hash)
 
 
-class Category(db.Model):
-
-    __tablename__ = 'Category'
-
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.Unicode(255), nullable=False)
-    date_created = db.Column(db.DateTime, nullable=False, default=datetime.now())
-    color = db.Column(db.Unicode(50), nullable=True)
-    
-    def __repr__(self):
-        return u'<Category %r>' % (self.title)
-
-
 class User(db.Model):
 
     __tablename__ = 'User'
@@ -144,11 +131,9 @@ class Thread(db.Model):
     date_created = db.Column(db.DateTime, nullable=False, default=datetime.now())
     created_by = db.Column(db.Integer, ForeignKey(User.id))
     user = relationship(User, backref='threads')
-    category_id = db.Column(db.Integer, ForeignKey(Category.id))
-    category = relationship(Category, backref='threads')
     display_hash = db.Column(db.String(255), nullable=False, unique=True)
-    spam = db.Column(db.Boolean, nullable=False, default=False)
     display_name = db.Column(db.Unicode(255), nullable=True)
+    nsfw = db.Column(db.Boolean, nullable=False, default=False)
     
     def __init__(self, title=None, body=None, category_id=None, display_name=None):
         self.title = title
@@ -173,7 +158,6 @@ class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     body = db.Column(db.Text, nullable=False)
     date_created = db.Column(db.DateTime, nullable=False, default=datetime.now())
-    spam = db.Column(db.Boolean, nullable=False, default=0)
     created_by = db.Column(db.Integer, ForeignKey(User.id))
     user = relationship(User, backref='posts')
     thread_id = db.Column(db.Integer, ForeignKey(Thread.id))

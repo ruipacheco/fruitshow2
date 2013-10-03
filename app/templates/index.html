@@ -15,11 +15,17 @@
 			{% endif %}
 			</dt>
 			<dd>
-				{{ thread.posts|count() }} Posts | 
+				{% if thread.nsfw %}
+					<abbr class="nsfw">NSFW</abbr>&nbsp;
+				{% endif %}
+				<time pubdate="pubdate">{{ thread.date_created|safe }}</time>&nbsp;
+				
+				{{ thread.posts|count() }} Posts&nbsp;
+				
 				{% if thread.user %}
-				{{ thread.user.username }}
+					<strong><a href="{{ url_for('user', display_hash=thread.user.display_hash, action=None) }}">{{ thread.user.username|safe }}</a></strong>
 				{% else %}
-				{{ thread.display_name|safe }}
+					<strong>{{ thread.display_name|safe }}</strong>
 				{% endif %}
 			</dd>
 		{% endfor %}
