@@ -67,7 +67,11 @@ def index(page=1):
     """ Lists all threads. """
     
     threads = OrderedDict()
-    pagination = Thread.query.order_by(Thread.id.desc()).filter(Thread.display_name!=None).paginate(page, CONVERSATIONS_PER_PAGE, False)
+    if current_user.is_active():
+        pagination = Thread.query.order_by(Thread.id.desc()).paginate(page, CONVERSATIONS_PER_PAGE, False)
+    else:
+        pagination = Thread.query.order_by(Thread.id.desc()).filter(Thread.user==None).paginate(page, CONVERSATIONS_PER_PAGE, False)
+        
     for thread in pagination.items:
         post = db.session.query(func.max(Post.id)).filter(Post.thread_id==thread.id).one()
         threads[thread] = post[0]
@@ -84,6 +88,9 @@ def new_thread():
         
         if form.validate():
             thread = form.populated_object()
+            if current_user.is_active():
+                form.display_name = None
+                thread.user = current_user
             thread.category_id = request.form['category_id']
             db.session.add(thread)
             db.session.commit()
@@ -101,19 +108,21 @@ def new_thread():
 def thread(display_hash=None, title=None):
     """ Add comments to an existing thread. """
     
-    def get_thread_by_hash(display_hash=None):
-        return Thread.query.filter(Thread.display_hash==display_hash).first()
+    thread = Thread.query.filter(Thread.display_hash==display_hash).first()
+    if not thread:
+        abort(404)
+        
+    if not current_user.is_active() and thread.user is not None:
+        return redirect(url_for('index'))
     
     if request.method == 'POST':
         form = PostForm(request.form)
         
-        if form.validate():
-            thread = get_thread_by_hash(display_hash=request.form['display_hash'])
-            if not thread:
-                abort(404)
-                
+        if form.validate():                
             post = form.populated_object()
-            post.thread_id = thread.id
+            post.thread = thread
+            if current_user.is_active():
+                post.user = current_user
             db.session.add(post)
             db.session.commit()
             
@@ -125,10 +134,6 @@ def thread(display_hash=None, title=None):
             abort(404)
             
         form = PostForm()
-        
-    thread = get_thread_by_hash(display_hash=display_hash)
-    if not thread:
-        abort(404)
         
     return render_template('thread.html', thread=thread, form=form)
 

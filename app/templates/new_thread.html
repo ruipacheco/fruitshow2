@@ -19,7 +19,9 @@
 		</select>
 		{{ form.title }}
 		{{ form.body(cols='80', rows='10') }}
+		{% if not current_user.is_active() %}
 		{{ form.display_name }}
+		{% endif %}
 		<button type="submit" class="pure-button pure-button-success">Add Comment</button>
 		<a href="{{ url_for('index') }}" class="pure-button pure-button-error">Cancel</a>
 	</fieldset>

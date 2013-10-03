@@ -17,6 +17,7 @@
 					    <ul>
 							<li><a href="{{ url_for('new_thread') }}">Start Conversation</a></li>
 							{% if current_user.is_active() %}
+							<li><a href="{{ url_for('logout') }}">Logout</a></li>
 							<li><a href="{{ url_for('user', display_hash=current_user.display_hash) }}">Edit Your Profile</a></li>
 							{% else %}
 							<li><a href="{{ url_for('login') }}">Login</a></li>
