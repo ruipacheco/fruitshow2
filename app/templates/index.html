@@ -4,12 +4,26 @@
 	<h2>Conversations</h2>
 	<dl>
 		{% for thread in threads %}
-			{% if threads[thread] %}
-				<dt><a href="{{ url_for('new_thread') }}/{{ thread.display_hash|safe }}/{{ thread.url_title()|safe }}#p{{ threads[thread] }}">{{ thread.title|safe }}</a></dt>
+			<dt>
+			{% if thread.user %}
+			<i class="icon-certificate"></i>
 			{% else %}
-				<dt><a href="{{ url_for('new_thread') }}/{{ thread.display_hash|safe }}/{{ thread.url_title()|safe }}">{{ thread.title|safe }}</a></dt>
+			<i class="icon-bullhorn"></i>
 			{% endif %}
-			<dd>{{ thread.posts|count() }} Posts | {{ thread.display_name|safe }}</dd>
+			{% if threads[thread] %}
+				<a href="{{ url_for('new_thread') }}/{{ thread.display_hash|safe }}/{{ thread.url_title()|safe }}#p{{ threads[thread] }}">{{ thread.title|safe }}</a>
+			{% else %}
+				<a href="{{ url_for('new_thread') }}/{{ thread.display_hash|safe }}/{{ thread.url_title()|safe }}">{{ thread.title|safe }}</a>
+			{% endif %}
+			</dt>
+			<dd>
+				{{ thread.posts|count() }} Posts | 
+				{% if thread.user %}
+				{{ thread.user.username }}
+				{% else %}
+				{{ thread.display_name|safe }}
+				{% endif %}
+			</dd>
 		{% endfor %}
 	</dl>
 	<div style="width:100%; text-align:center; clear:both;">

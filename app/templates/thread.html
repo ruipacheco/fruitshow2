@@ -16,19 +16,17 @@
 		</footer>
 	</article>
 	{% for post in thread.posts %}
-		{% if not post.spam %}
-			<article id="p{{ post.id }}">
-				{{ post.body|oembed(urlize_all=False, maxwidth=800)|markdown|safe }}
-				<footer>
-					<time pubdate="pubdate">{{ post.date_created|safe }}</time>&nbsp;|&nbsp;
-					{% if post.user %}
-					{{ post.user.username|safe }}
-					{% else %}
-					{{ post.display_name|safe }}
-					{% endif %}
-				</footer>
-			</article>
-		{% endif %}
+		<article id="p{{ post.id }}">
+			{{ post.body|oembed(urlize_all=False, maxwidth=800)|markdown|safe }}
+			<footer>
+				<time pubdate="pubdate">{{ post.date_created|safe }}</time>&nbsp;|&nbsp;
+				{% if post.user %}
+				{{ post.user.username|safe }}
+				{% else %}
+				{{ post.display_name|safe }}
+				{% endif %}
+			</footer>
+		</article>
 	{% endfor %}
 	<form class="pure-form pure-form-stacked" method="POST" action="{{ url_for('new_thread') }}/{{ thread.display_hash|safe }}/{{ thread.url_title()|safe }}">
 		{% if form.errors %}
