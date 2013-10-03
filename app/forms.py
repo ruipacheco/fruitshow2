@@ -27,7 +27,6 @@ class InviteForm(ModelForm):
     def populated_object(self):
         """ Returns a new model object populated with the form values. """
         
-        import ipdb; ipdb.set_trace()
         invite = Invite(self.email.data)
         self.populate_obj(invite)
         return invite
@@ -42,9 +41,6 @@ class UserForm(ModelForm):
     def populated_object(self):
         """ Returns a new model object populated with the form values. """
         
-        #import ipdb; ipdb.set_trace()
-        
-        #user = self.Meta.model
         user = User()
         self.populate_obj(user)
         return user
@@ -61,6 +57,8 @@ class ThreadForm(ModelForm):
         thread = Thread()
         self.populate_obj(thread)
         return thread
+    
+    make_public = BooleanField(u'Create public post', validators=[Optional()])
 
         
 class PostForm(ModelForm):

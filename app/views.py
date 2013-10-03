@@ -84,14 +84,17 @@ def new_thread():
     """ Used to create new threads for discussion. """
     
     if request.method == 'POST':
-        import ipdb; ipdb.set_trace()
         form = ThreadForm(request.form)
         
         if form.validate():
             thread = form.populated_object()
             if current_user.is_active():
-                thread.display_name = None
-                thread.user = current_user
+                if form.make_public.data is True:
+                    thread.display_name = current_user.username
+                    thread.user = None
+                else:
+                    thread.display_name = None
+                    thread.user = current_user
             db.session.add(thread)
             db.session.commit()
             
