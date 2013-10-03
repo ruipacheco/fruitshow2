@@ -6,9 +6,7 @@
 		{% for thread in threads %}
 			<dt>
 			{% if thread.user %}
-			<i class="icon-certificate"></i>
-			{% else %}
-			<i class="icon-bullhorn"></i>
+			<i class="icon-lock"></i>
 			{% endif %}
 			{% if threads[thread] %}
 				<a href="{{ url_for('new_thread') }}/{{ thread.display_hash|safe }}/{{ thread.url_title()|safe }}#p{{ threads[thread] }}">{{ thread.title|safe }}</a>
