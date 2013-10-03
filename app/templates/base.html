@@ -28,7 +28,9 @@
 							{% endif %}
 							{% if current_user.is_active() and current_user.is_admin() %}
 							<li class="pure-menu-heading">Administration</li>
-					        <li><a href="{{ url_for('users') }}"><i class="icon-user"></i>&nbsp;Users</a></li>
+					        <li><a href="{{ url_for('users') }}"><i class="icon-group"></i>&nbsp;Users</a></li>
+							<li class="pure-menu-heading">Help</li>
+							<li><a href="http://daringfireball.net/projects/markdown/syntax" target="_blank">&nbsp;Markdown</a></li>
 							{% endif %}
 					    </ul>
 					</div>
