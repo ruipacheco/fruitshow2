@@ -80,15 +80,14 @@ a {
 	text-decoration:none;
 }
 
-#menu a {
-	color:rgb(68, 68, 68);
-	border-bottom:1px dotted rgb(153, 153, 153);
+#menu div.borderless {
+	border:none;
 }
 
 #content {
 	min-height: 100%;
 	height:auto !important;
-	margin:0 auto -50px;
+	margin:0 auto -50px 0.8em;
 }
 
 #header {
@@ -120,7 +119,7 @@ a {
 }
 
 .centered {
-	width:350px;
+	width:400px;
 	display: block;
 	margin-left: auto;
 	margin-right: auto;

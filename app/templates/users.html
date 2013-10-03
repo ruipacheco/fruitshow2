@@ -1,9 +1,26 @@
 {% extends 'base.html' %}
 
 {% block content %}
-	<dl>
-		{% for user in users %}
-			<dt><a href="{{ url_for('user') }}/{{ user.display_hash|safe }}">{{ user.username|safe }}</a></dt>
-		{% endfor %}
-	</dl>
+	<table class="pure-table">
+		<thead>
+			<tr>
+				<th>Username</th>
+				<th>Date Registered</th>
+				<th>Last Login</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for user in users.items %}
+				<tr>
+					<td>
+						<a href="{{ url_for('user') }}/{{ user.display_hash|safe }}">{{ user.username|safe }}</a>
+					</td>
+					<td>
+						{{ user.date_created|safe }}
+					</td>
+					<td>{{ user.last_login|safe }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
 {% endblock %}

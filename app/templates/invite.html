@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="centered">
+	<h2>Invite a user to join the forum</h2>
+	<form class="pure-form" method="POST" action="{{ url_for('invite') }}">
+		<fieldset>
+			{{ form.email.label }}
+			{{ form.email }}
+			<button type="submit" class="pure-button pure-button-success">Send Invite</button>
+		</fieldset>
+	</form>
+</div>
+{% endblock %}

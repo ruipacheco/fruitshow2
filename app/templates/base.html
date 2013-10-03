@@ -13,9 +13,23 @@
 		<div class="pure-g-r">
 			<div class="pure-u-1-5">
 				<div id="menu">
-					<div id="create-post">
-						<a href="{{ url_for('new_thread') }}" class="pure-button pure-button-primary">Start Conversation</a>
+					
+					<div class="borderless pure-menu pure-menu-open">
+					    <ul>
+							<li><a href="{{ url_for('new_thread') }}">Start Conversation</a></li>
+							<li><a href="{{ url_for('login') }}">Login</a></li>
+							<li><a href="{{ url_for('invite') }}">Invite</a></li>
+							{% if current_user.is_admin() %}
+							<li class="pure-menu-heading">Administration</li>
+					        <li><a href="{{ url_for('users') }}">Users</a></li>
+							{% endif %}
+					    </ul>
 					</div>
+					<!--
+					<div id="create-post">
+						<a href="" class="pure-button pure-button-primary"></a>
+					</div>
+					-->
 					{% block sidebar %}
 					{% endblock %}
 				</div>

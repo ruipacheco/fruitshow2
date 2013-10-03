@@ -2,9 +2,35 @@
 
 from wtforms_alchemy import ModelForm, ModelFormField
 from wtforms import widgets
-from wtforms.fields import TextField
-from wtforms.validators import Optional
+from wtforms.form import Form
+from wtforms.fields import TextField, PasswordField, BooleanField
+from wtforms.validators import Optional, required, length, email
 from models import *
+
+
+class LoginForm(Form):
+    """ Form used for login.
+    
+        Doesn't use the User model as basis because it works in a very different way.
+    """
+    
+    identifier = TextField(u'Email or Username', [required(), length(max=255)])
+    password = PasswordField(u'Password', [required(), length(max=255)])
+    remember_me = BooleanField(u'Remember me')
+
+
+class InviteForm(ModelForm):
+    class Meta:
+        model = Invite
+        exclude = ['display_hash']
+
+    def populated_object(self):
+        """ Returns a new model object populated with the form values. """
+        
+        import ipdb; ipdb.set_trace()
+        invite = Invite(self.email.data)
+        self.populate_obj(invite)
+        return invite
 
 
 class CategoryForm(ModelForm):

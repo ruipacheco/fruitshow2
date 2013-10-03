@@ -14,7 +14,7 @@
 	<fieldset>
 		<select name="category_id" id="category_id">
 		{% for category in categories %}
-			<option value="{{ category.category_id }}">{{ category.title }}</option>
+			<option value="{{ category.id }}">{{ category.title }}</option>
 		{% endfor %}
 		</select>
 		{{ form.title }}

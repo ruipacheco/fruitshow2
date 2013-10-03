@@ -13,7 +13,7 @@
 	</article>
 	{% for post in thread.posts %}
 		{% if not post.spam %}
-			<article id="p{{ post.post_id }}">
+			<article id="p{{ post.id }}">
 				{{ post.body|oembed(urlize_all=False, maxwidth=800)|markdown|safe }}
 				<footer>
 					<time pubdate="pubdate">{{ post.date_created|safe }}</time>&nbsp;|&nbsp;
