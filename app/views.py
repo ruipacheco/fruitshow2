@@ -15,8 +15,7 @@ from collections import OrderedDict
 
 import passlib
 from passlib.hash import pbkdf2_sha512
-    
-    
+
 
 def send_email(subject, sender, recipients, text_body):
     msg = Message(subject, sender = sender, recipients = recipients)
@@ -43,7 +42,7 @@ def logout():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     """ Handle user login """
-    
+
     if request.method == 'POST':
         form = LoginForm(request.form)
         if form.validate():
