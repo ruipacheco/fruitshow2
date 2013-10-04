@@ -49,7 +49,7 @@ class UserForm(ModelForm):
 class ThreadForm(ModelForm):
     class Meta:
         model = Thread
-        exclude = ['display_hash']
+        exclude = ['display_hash', 'last_updated']
     
     def populated_object(self):
         """ Returns a new object populated with the form values. """

@@ -134,13 +134,15 @@ class Thread(db.Model):
     display_hash = db.Column(db.String(255), nullable=False, unique=True)
     display_name = db.Column(db.Unicode(255), nullable=True)
     nsfw = db.Column(db.Boolean, nullable=False, default=False)
+    last_updated = db.Column(db.DateTime, nullable=False)
     
     def __init__(self, title=None, body=None, category_id=None, display_name=None):
         self.title = title
         self.body = body
         self.category_id = category_id
-        self.display_name=display_name
+        self.display_name = display_name
         self.display_hash = custom_uuid()
+        self.last_updated = self.date_created
     
     def __repr__(self):
         return u'<Thread %r>' % (self.title)
@@ -171,6 +173,7 @@ class Post(db.Model):
         self.created_by = created_by
         self.display_name = display_name
         self.display_hash = custom_uuid()
+        self.date_created = datetime.now()
     
     def __repr__(self):
         return u'<Post %r>' % (self.date_created)

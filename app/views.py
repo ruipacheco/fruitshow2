@@ -66,15 +66,17 @@ def login():
 def index(page=1):
     """ Lists all threads. """
     
+    query = Thread.query.order_by(Thread.last_updated.desc())
+    
     threads = OrderedDict()
     if current_user.is_active():
-        pagination = Thread.query.order_by(Thread.id.desc()).paginate(page, CONVERSATIONS_PER_PAGE, False)
+        pagination = query.paginate(page, CONVERSATIONS_PER_PAGE, False)
     else:
-        pagination = Thread.query.order_by(Thread.id.desc()).filter(Thread.user==None).paginate(page, CONVERSATIONS_PER_PAGE, False)
+        pagination = query.filter(Thread.user==None).paginate(page, CONVERSATIONS_PER_PAGE, False)
         
     for thread in pagination.items:
-        post = db.session.query(func.max(Post.id)).filter(Post.thread_id==thread.id).one()
-        threads[thread] = post[0]
+        post = db.session.query(func.max(Post.id), Post.display_hash).filter(Post.thread_id==thread.id).one()
+        threads[thread] = post[1]
     
     return render_template('index.html', threads=threads, pagination=pagination)
 
@@ -120,9 +122,10 @@ def thread(display_hash=None, title=None):
     if request.method == 'POST':
         form = PostForm(request.form)
         
-        if form.validate():                
+        if form.validate():
             post = form.populated_object()
             post.thread = thread
+            thread.last_updated = post.date_created
             if current_user.is_active():
                 post.user = current_user
             db.session.add(post)
