@@ -27,7 +27,7 @@ class InviteForm(ModelForm):
     def populated_object(self):
         """ Returns a new model object populated with the form values. """
         
-        invite = Invite(self.email.data)
+        invite = Invite()
         self.populate_obj(invite)
         return invite
 

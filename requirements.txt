@@ -19,3 +19,4 @@ flask-misaka==1.0.2
 micawber==0.3.0
 Flask-Mail==0.9.0
 Flask-Gravatar==0.4.0
+Unidecode==0.04.14

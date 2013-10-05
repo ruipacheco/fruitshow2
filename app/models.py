@@ -12,6 +12,11 @@ from datetime import datetime
 import uuid
 from uuid import uuid4
 
+import re
+from unidecode import unidecode
+
+
+_punct_re = re.compile(r'[\t !"#$%&\'()*\-/<=>?@\[\\\]^_`{|},.]+')
 
 def custom_uuid():
     """ Generates a unique random numeric UUID. """
@@ -131,7 +136,7 @@ class Thread(db.Model):
     date_created = db.Column(db.DateTime, nullable=False, default=datetime.now())
     created_by = db.Column(db.Integer, ForeignKey(User.id))
     user = relationship(User, backref='threads')
-    display_hash = db.Column(db.String(255), nullable=False, unique=True)
+    display_hash = db.Column(db.Unicode(255), nullable=False, unique=True)
     display_name = db.Column(db.Unicode(255), nullable=True)
     nsfw = db.Column(db.Boolean, nullable=False, default=False)
     last_updated = db.Column(db.DateTime, nullable=False)
@@ -148,9 +153,12 @@ class Thread(db.Model):
         return u'<Thread %r>' % (self.title)
         
     def url_title(self):
-        """ Method used to display a formatted version of the thread title, with spaces replaced by dashes."""
+        """ Generates an ASCII-only slug. """
         
-        return self.title.replace(' ', '-')
+        result = []
+        for word in _punct_re.split(self.title.lower()):
+            result.extend(unidecode(word).split())
+        return unicode(u'-'.join(result))
 
 
 class Post(db.Model):
@@ -164,7 +172,7 @@ class Post(db.Model):
     user = relationship(User, backref='posts')
     thread_id = db.Column(db.Integer, ForeignKey(Thread.id))
     thread = relationship(Thread, backref='posts')
-    display_hash = db.Column(db.String(255), nullable=False, unique=True)
+    display_hash = db.Column(db.Unicode(255), nullable=False, unique=True)
     display_name = db.Column(db.Unicode(255), nullable=True)
     
     def __init__(self, body=None, thread_id=None, created_by=None, display_name=None):

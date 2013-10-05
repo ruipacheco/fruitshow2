@@ -17,6 +17,15 @@ import passlib
 from passlib.hash import pbkdf2_sha512
 
 
+def whatisthis(s):
+    if isinstance(s, str):
+        print "ordinary string"
+    elif isinstance(s, unicode):
+        print "unicode string"
+    else:
+        print "not a string"
+
+
 def send_email(subject, sender, recipients, text_body):
     msg = Message(subject, sender = sender, recipients = recipients)
     msg.body = text_body
@@ -72,8 +81,9 @@ def index(page=1):
         pagination = query.paginate(page, CONVERSATIONS_PER_PAGE, False)
     else:
         pagination = query.filter(Thread.user==None).paginate(page, CONVERSATIONS_PER_PAGE, False)
-        
+    
     for thread in pagination.items:
+        #thread.title = thread.title.decode('utf8')
         post = db.session.query(func.max(Post.id), Post.display_hash).filter(Post.thread_id==thread.id).one()
         threads[thread] = post[1]
     
