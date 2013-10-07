@@ -6,6 +6,7 @@
 		<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.3.0/pure-min.css">
 		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css">
 		<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+		<link rel="alternate" href="{{ url_for('recent_feed') }}" title="Recent Changes" type="application/atom+xml">
 		<!--[if lt IE 9]>
 		<script src="{{ url_for('static', filename='js/htmlshiv.js') }}"></script>
 		<![endif]-->
@@ -34,7 +35,8 @@
 							{% endif %}
 							
 							<li class="pure-menu-heading">Help</li>
-							<li><a href="http://daringfireball.net/projects/markdown/syntax" target="_blank">&nbsp;Markdown</a></li>
+							<li><a href="{{ url_for('recent_feed') }}"><i class="icon-rss"></i>&nbsp;Atom</a></li>
+							<li><a href="http://daringfireball.net/projects/markdown/syntax" target="_blank"><i class="icon-book"></i>&nbsp;Markdown</a></li>
 					    </ul>
 					</div>
 					{% block sidebar %}

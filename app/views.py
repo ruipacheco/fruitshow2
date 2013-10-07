@@ -5,6 +5,8 @@ from flask import render_template, request, redirect, url_for, g, session
 from flask.ext.login import current_user, login_user, logout_user, login_required
 from flask.ext.mail import Message
 from sqlalchemy.sql import func
+from urlparse import urljoin
+from werkzeug.contrib.atom import AtomFeed
 from app import mail
 from models import *
 from forms import *
@@ -17,13 +19,8 @@ import passlib
 from passlib.hash import pbkdf2_sha512
 
 
-def whatisthis(s):
-    if isinstance(s, str):
-        print "ordinary string"
-    elif isinstance(s, unicode):
-        print "unicode string"
-    else:
-        print "not a string"
+def make_external(url):
+    return urljoin(request.url_root, url)
 
 
 def send_email(subject, sender, recipients, text_body):
@@ -40,6 +37,16 @@ def page_not_found(e):
 @login_manager.user_loader
 def load_user(userid):
     return User.query.filter(User.display_hash==userid).first()
+
+
+@app.route('/recent.atom')
+def recent_feed():
+    feed = AtomFeed('Recent Articles', feed_url=request.url, url=request.url_root)
+    threads = Thread.query.order_by(Thread.last_updated.desc()).filter(Thread.user==None).all()
+    for thread in threads:
+        url = url_for('thread', display_hash=thread.display_hash, title=thread.slug())
+        feed.add(thread.title, '', content_type='html', author=thread.display_name, url=url, updated=thread.last_updated, published=thread.date_created)
+    return feed.get_response()
 
 
 @app.route('/logout')

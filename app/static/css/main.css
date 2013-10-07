@@ -66,17 +66,14 @@ section {
 
 a {
 	text-decoration:none;
-	/*color:rgb(71, 95, 119);*/
 	color:#2C649C;
 }
 
 a:visited {
-	/*color:rgb(53, 75, 94);*/
 	color:#808080;
 }
 
 a:hover {
-	/*color:rgb(215, 75, 75);*/
 	color:#D74B4B;
 }
 
