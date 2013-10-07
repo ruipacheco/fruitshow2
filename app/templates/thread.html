@@ -18,7 +18,7 @@
 				{% endif %}
 				&nbsp;
 				<time pubdate="pubdate">{{ thread.date_created|safe }}</time>&nbsp;
-				<a href="{{ url_for('thread', display_hash=thread.display_hash, title=thread.url_title()) }}"><i class="icon-anchor"></i></a>&nbsp;
+				<a href="{{ url_for('thread', display_hash=thread.display_hash, title=thread.slug()) }}"><i class="icon-anchor"></i></a>&nbsp;
 			</div>
 		</footer>
 	</article>
@@ -37,13 +37,13 @@
 				{% endif %}
 				<time pubdate="pubdate">{{ post.date_created|safe }}</time>&nbsp;
 				&nbsp;
-				<a href="{{ url_for('thread', display_hash=thread.display_hash, title=thread.url_title()) }}#p{{ post.display_hash|safe }}">
+				<a href="{{ url_for('thread', display_hash=thread.display_hash, title=thread.slug()) }}#p{{ post.display_hash|safe }}">
 					<i class="icon-anchor"></i>
 				</a>
 			</footer>
 		</article>
 	{% endfor %}
-	<form class="pure-form pure-form-stacked" method="POST" action="{{ url_for('new_thread') }}/{{ thread.display_hash|safe }}/{{ thread.url_title()|safe }}">
+	<form class="pure-form pure-form-stacked" method="POST" action="{{ url_for('new_thread') }}/{{ thread.display_hash|safe }}/{{ thread.slug()|safe }}">
 		{% if form.errors %}
 		    <ul>
 		        {% for field_name, field_errors in form.errors|dictsort if field_errors %}

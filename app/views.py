@@ -109,7 +109,7 @@ def new_thread():
             db.session.add(thread)
             db.session.commit()
             
-            return redirect(url_for('thread', display_hash=thread.display_hash, title=thread.url_title()))
+            return redirect(url_for('thread', display_hash=thread.display_hash, title=thread.slug()))
             
     if request.method == 'GET':
         form = ThreadForm()
@@ -141,7 +141,7 @@ def thread(display_hash=None, title=None):
             db.session.commit()
             
             anchor = 'p' + str(post.display_hash)
-            return redirect(url_for('thread', display_hash=thread.display_hash, title=thread.url_title(), _anchor=anchor))
+            return redirect(url_for('thread', display_hash=thread.display_hash, title=thread.slug(), _anchor=anchor))
       
     if request.method == 'GET':
         if display_hash is None:

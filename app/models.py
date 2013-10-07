@@ -152,7 +152,7 @@ class Thread(db.Model):
     def __repr__(self):
         return u'<Thread %r>' % (self.title)
         
-    def url_title(self):
+    def slug(self):
         """ Generates an ASCII-only slug. """
         
         result = []

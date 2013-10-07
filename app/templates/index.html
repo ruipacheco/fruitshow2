@@ -9,9 +9,9 @@
 				<i class="icon-lock"></i>
 			{% endif %}
 			{% if threads[thread] %}
-				<a href="{{ url_for('new_thread') }}/{{ thread.display_hash|safe }}/{{ thread.url_title()|safe }}#p{{ threads[thread] }}">{{ thread.title|safe }}</a>
+				<a href="{{ url_for('new_thread') }}/{{ thread.display_hash|safe }}/{{ thread.slug()|safe }}#p{{ threads[thread] }}">{{ thread.title|safe }}</a>
 			{% else %}
-				<a href="{{ url_for('new_thread') }}/{{ thread.display_hash|safe }}/{{ thread.url_title()|safe }}">{{ thread.title|safe }}</a>
+				<a href="{{ url_for('new_thread') }}/{{ thread.display_hash|safe }}/{{ thread.slug()|safe }}">{{ thread.title|safe }}</a>
 			{% endif %}
 			</dt>
 			<dd>
