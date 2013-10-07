@@ -53,7 +53,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.Unicode(255), nullable=False)
     password = db.Column(PasswordType(schemes=[SECURITY_PASSWORD_HASH]), nullable=False)
-    display_hash = db.Column(db.String(255), nullable=False, unique=True)
+    display_hash = db.Column(db.Unicode(255), nullable=False, unique=True)
     date_created = db.Column(db.DateTime, nullable=False, default=datetime.now())
     last_login = db.Column(db.DateTime, nullable=True)
     email = db.Column(EmailType, nullable=False)
@@ -132,7 +132,7 @@ class Thread(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.Unicode(255), nullable=False)
-    body = db.Column(db.Text, nullable=True)
+    body = db.Column(db.UnicodeText, nullable=True)
     date_created = db.Column(db.DateTime, nullable=False, default=datetime.now())
     created_by = db.Column(db.Integer, ForeignKey(User.id))
     user = relationship(User, backref='threads')
@@ -166,7 +166,7 @@ class Post(db.Model):
     __tablename__ = 'Post'
 
     id = db.Column(db.Integer, primary_key=True)
-    body = db.Column(db.Text, nullable=False)
+    body = db.Column(db.UnicodeText, nullable=False)
     date_created = db.Column(db.DateTime, nullable=False, default=datetime.now())
     created_by = db.Column(db.Integer, ForeignKey(User.id))
     user = relationship(User, backref='posts')

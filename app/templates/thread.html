@@ -56,7 +56,7 @@
 		<fieldset>
 			<input type="hidden" name="display_hash" value="{{ thread.display_hash }}" />
 			{{ form.body(cols='80', rows='10') }}
-			{% if not current_user.is_active() %}
+			{% if not thread.user %}
 			{{ form.display_name }}
 			{% endif %}
 			<button type="submit" class="pure-button pure-button-success"><i class="icon-comment"></i>&nbsp;Add Comment</button>
