@@ -66,8 +66,12 @@ def login():
             if not user:
                 user = User.query.filter(User.email==form.identifier.data).first()
             
-            if user and pbkdf2_sha512.verify(form.password.data, user.password.hash) and login_user(user, remember=form.remember_me.data):
-                user.login()
+            try:
+                if user and pbkdf2_sha512.verify(form.password.data, user.password.hash) and login_user(user, remember=form.remember_me.data):
+                    user.login()
+            except Exception:
+                pass
+                
                 return redirect(url_for('index'))
     
     if request.method == 'GET':
