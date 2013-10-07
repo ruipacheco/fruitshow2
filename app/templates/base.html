@@ -15,6 +15,7 @@
 			<div class="pure-u-1-5">
 				<div id="menu">
 					<div class="borderless pure-menu pure-menu-open">
+						<a href="/" class="pure-menu-heading"><i class="icon-home"></i>&nbsp;Homepage</a>
 					    <ul>
 							<li><a href="{{ url_for('new_thread') }}"><i class="icon-pencil"></i>&nbsp;Start Conversation</a></li>
 							{% if current_user.is_active() %}
