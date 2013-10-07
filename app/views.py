@@ -83,7 +83,6 @@ def index(page=1):
         pagination = query.filter(Thread.user==None).paginate(page, CONVERSATIONS_PER_PAGE, False)
     
     for thread in pagination.items:
-        #thread.title = thread.title.decode('utf8')
         post = db.session.query(func.max(Post.id), Post.display_hash).filter(Post.thread_id==thread.id).one()
         threads[thread] = post[1]
     
