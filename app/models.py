@@ -63,7 +63,8 @@ class User(db.Model):
     
     def __init__(self, username=None, password=None, email=None):
         self.username = username
-        self.password.hash = password
+        if self.password:
+            self.password.hash = password
         self.email = email
         self.display_hash = custom_uuid()
     
@@ -74,7 +75,8 @@ class User(db.Model):
         """ Receives a model object, usually from a form, and updates the current object with it's values. """
         
         self.username = model.username
-        self.password.hash = model.password.hash
+        if self.password:
+            self.password.hash = model.password.hash
         self.email = model.email
         
     def generate_uuid(self):
