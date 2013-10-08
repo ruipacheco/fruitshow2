@@ -316,7 +316,6 @@ def user(display_hash=None, action=None):
     if not user:
         abort(404)
     
-    import ipdb; ipdb.set_trace()
     if request.method == 'POST':
         form = UserForm(request.form)
         
