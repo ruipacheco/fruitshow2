@@ -10,7 +10,7 @@ from werkzeug.contrib.atom import AtomFeed
 from app import mail
 from models import *
 from forms import *
-from config import CONVERSATIONS_PER_PAGE, DELETED_ROLE
+from config import CONVERSATIONS_PER_PAGE
 
 import collections
 from collections import OrderedDict

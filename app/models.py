@@ -4,7 +4,7 @@ from app import db
 from sqlalchemy import Table, Column, Integer, ForeignKey
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy_utils import EmailType, PasswordType
-from config import SECURITY_PASSWORD_HASH, ADMINISTRATOR_ROLE, CITIZEN_ROLE, DELETED_ROLE
+from config import SECURITY_PASSWORD_HASH, ADMINISTRATOR_ROLE, CITIZEN_ROLE
 
 import datetime
 from datetime import datetime
@@ -17,6 +17,7 @@ from unidecode import unidecode
 
 
 _punct_re = re.compile(r'[\t !"#$%&\'()*\-/<=>?@\[\\\]^_`{|},.]+')
+
 
 def custom_uuid():
     """ Generates a unique random numeric UUID. """
@@ -98,7 +99,7 @@ class User(db.Model):
     def __role_exists(self, a_role=None):
         """ Return true if the user has the specified role. """
         
-        user = User.query.join(User.roles).filter(User.id==self.id, Role.title==a_role).all()
+        user = User.query.join(User.roles).filter(User.id==self.id, Role.id==a_role).all()
         if user:
             return True
         return False
