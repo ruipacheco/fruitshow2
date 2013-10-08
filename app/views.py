@@ -188,6 +188,9 @@ def invite():
         and control the timeout
     """
     
+    if not current_user.is_citizen() and not current_user.is_admin():
+        return redirect(url_for('index'))
+    
     if request.method == 'POST':
         form = InviteForm(request.form)
         if form.validate():
@@ -229,7 +232,6 @@ def role(page=1):
             #TODO If role exists, flash message
             if not existing_role:
                 role = form.populated_object()
-                import ipdb; ipdb.set_trace()
                 if form.add_all_users.data:
                     role.users = User.query.all()
                 
@@ -253,6 +255,7 @@ def users(page=1):
         if 'warning_display_hash' in request.form:
             display_hash = request.form['warning_display_hash']
             user = User.query.filter(User.display_hash==display_hash).first()
+            
             if current_user.is_admin() or current_user.display_hash == user.display_hash:
                 return render_template('warning.html', user=user)
             else:
@@ -278,12 +281,15 @@ def add_user():
     if not current_user.is_admin():
         return redirect('users')
     
-    action = url_for('add_user')
-    
     if request.method == 'POST':
         form = UserForm(request.form)
         
         if form.validate():
+            existing_user = User.query.filter(User.username==form.username.data).first()
+            if existing_user:
+                #TODO Set error to be displayed (flash?)
+                return redirect(url_for('users'))
+                
             user = form.populated_object()
             user.generate_uuid()
             db.session.add(user)
@@ -293,7 +299,9 @@ def add_user():
     if request.method == 'GET':
         form = UserForm()
         
-    return render_template('user.html', form=form, action=action)
+    action = url_for('add_user')
+    roles = Role.query.all()
+    return render_template('user.html', form=form, action=action, roles=roles)
 
 
 @app.route('/user/<string:display_hash>', methods=['GET', 'POST'])
@@ -301,40 +309,38 @@ def add_user():
 def user(display_hash=None, action=None):
     """ Create or edit a user. """
     
-    if request.method == 'POST': 
-        if current_user.is_admin():
-            form = UserForm(request.form)
+    if not display_hash:
+        abort(404)
+    
+    user = User.query.filter(User.display_hash==display_hash).first()
+    if not user:
+        abort(404)
+    
+    import ipdb; ipdb.set_trace()
+    if request.method == 'POST':
+        form = UserForm(request.form)
         
-            if form.validate():
-                user = form.populated_object()
-            
-                if not form.display_hash.data:
-                    existing_user = User.query.filter(User.username==form.username.data).first()
-                    if existing_user:
-                        # TODO Set error to be displayed (flash?)
-                        return redirect(url_for('users'))
-                    
-                    user.generate_uuid()
-                    db.session.add(user)
-                else:
-                    registered_user = User.query.filter(User.display_hash==form.display_hash.data).first()
-                    registered_user.update_from_model(user)
+        if form.validate():
+            #TODO Flash message if this condition is not met
+            if form.display_hash.data == current_user.display_hash or current_user.is_admin():
+                user = User.query.filter(User.display_hash==form.display_hash.data).first()
+                user.update_from_model(user)
                 
+                if current_user.is_admin():
+                    user.roles = []
+                    for display_hash in request.form.getlist('role'):
+                        role = Role.query.filter(Role.display_hash==display_hash).first()
+                        user.roles.append(role)
                 db.session.commit()
-        return redirect(url_for('users'))
+                return redirect(url_for('users'))
     
     if request.method == 'GET':
-        if not display_hash:
-            abort(404)
-            
-        user = User.query.filter(User.display_hash==display_hash).first()
-        if not user:
-            abort(404)
         form = UserForm(obj=user)
-        action = url_for('user', display_hash=user.display_hash)
-            
-    return render_template('user.html', form=form, action=action)
-    
+        
+    action = url_for('user', display_hash=user.display_hash)
+    roles = Role.query.all()
+    return render_template('user.html', form=form, action=action, roles=roles, user=user)
+
 
 @app.route('/user/<string:display_hash>/conversations', methods=['GET'])
 @login_required

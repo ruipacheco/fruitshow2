@@ -4,6 +4,7 @@ from app import db
 from sqlalchemy import Table, Column, Integer, ForeignKey
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy_utils import EmailType, PasswordType
+from wtforms.validators import Optional
 from config import SECURITY_PASSWORD_HASH, ADMINISTRATOR_ROLE, CITIZEN_ROLE
 
 import datetime
@@ -53,7 +54,7 @@ class User(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.Unicode(255), nullable=False)
-    password = db.Column(PasswordType(schemes=[SECURITY_PASSWORD_HASH]), nullable=False)
+    password = db.Column(PasswordType(schemes=[SECURITY_PASSWORD_HASH]), nullable=True)
     display_hash = db.Column(db.Unicode(255), nullable=False, unique=True)
     date_created = db.Column(db.DateTime, nullable=False, default=datetime.now())
     last_login = db.Column(db.DateTime, nullable=True)
@@ -62,7 +63,7 @@ class User(db.Model):
     
     def __init__(self, username=None, password=None, email=None):
         self.username = username
-        self.password = password
+        self.password.hash = password
         self.email = email
         self.display_hash = custom_uuid()
     
@@ -73,7 +74,7 @@ class User(db.Model):
         """ Receives a model object, usually from a form, and updates the current object with it's values. """
         
         self.username = model.username
-        self.password = model.password
+        self.password.hash = model.password.hash
         self.email = model.email
         
     def generate_uuid(self):

@@ -15,26 +15,51 @@
 		{% endif %}
 		<fieldset>
 			{{ form.display_hash()|safe }}
-			<h2>User Data</h2>
-			<div class="pure-control-group">
-	        	<label>Username: {{ form.username }}</label>
+			<h2>User Account</h2>
+			<div class="pure-g-r">
+				<div class="pure-u-1-2">
+					<h3>Personal Details</h3>
+					<div class="pure-control-group">
+			        	<label>Username: {{ form.username }}</label>
+					</div>
+					<div class="pure-control-group">
+						<label>Password: {{ form.password }}</label>
+					</div>
+					<div class="pure-control-group">
+						<label>Email: {{ form.email }}</label>
+					</div>
+					<div class="pure-control-group">
+						<label>Last Login
+						<input type="text" name="last_login" value="{{ form.last_login.data }}" disabled />
+						</label>
+					</div>
+					<div class="pure-control-group">
+							<label>Date Created
+							<input type="text" name="date_created" value="{{ form.date_created.data }}" disabled />
+							</label>
+					</div>
+				</div>
+				<div class="pure-u-1-2">
+					{% if roles and current_user.is_admin(): %}
+					<h3>Roles</h3>
+					<div class="pure-control-group">
+						{% for role in roles %}
+						
+							{% if form.display_hash.data and role in user.roles %}
+							{% set checked = "checked" %}
+							{% else %}
+							{% set checked = "" %}
+							{% endif %}
+							<label class="pure-checkbox">
+								<input type="checkbox" name="role" id="role_{{ role.display_hash }}" value="{{ role.display_hash }}" {{ checked }} />
+								&nbsp;{{ role.title }}
+							</label>
+						{% endfor %}
+					</div>
+					{% endif %}
+				</div>
 			</div>
-			<div class="pure-control-group">
-				<label>Password: {{ form.password }}</label>
-			</div>
-			<div class="pure-control-group">
-				<label>Email: {{ form.email }}</label>
-			</div>
-			<div class="pure-control-group">
-				<label>Last Login
-				<input type="text" name="last_login" value="{{ form.last_login.data }}" disabled />
-				</label>
-			</div>
-			<div class="pure-control-group">
-					<label>Date Created
-					<input type="text" name="date_created" value="{{ form.date_created.data }}" disabled />
-					</label>
-			</div>
+			
 			 <div class="pure-controls">
 				 <button type="submit" class="pure-button pure-button-success">Save</button>
 				 <a href="{{ url_for('users') }}" class="pure-button pure-button-error">Cancel</a>

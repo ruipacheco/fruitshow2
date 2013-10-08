@@ -9,12 +9,12 @@ from models import *
 
 
 class RoleForm(ModelForm):
-    """ Create roles """
+    """ Create roles. """
     
     class Meta:
         model = Role
         exclude = ['display_hash']
-    add_all_users = BooleanField(u'All all users to new role')
+    add_all_users = BooleanField(u'All existing users to new role')
     
     def populated_object(self):
         """ Returns a new model object populated with the form values. """
@@ -36,6 +36,7 @@ class LoginForm(Form):
 
 
 class InviteForm(ModelForm):
+    """ Form used to send invites. """
     class Meta:
         model = Invite
         exclude = ['display_hash']
@@ -49,6 +50,8 @@ class InviteForm(ModelForm):
 
 
 class UserForm(ModelForm):
+    """ Form used to manage users. """
+    
     class Meta:
         model = User
         
@@ -64,6 +67,8 @@ class UserForm(ModelForm):
 
 
 class ThreadForm(ModelForm):
+    """ Form used to create new threads. """
+    
     class Meta:
         model = Thread
         exclude = ['display_hash', 'last_updated']
@@ -77,6 +82,8 @@ class ThreadForm(ModelForm):
 
         
 class PostForm(ModelForm):
+    """ Form used to add Posts to a thread. """
+    
     class Meta:
         model = Post
         exclude = ['display_hash']
