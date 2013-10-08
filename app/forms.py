@@ -57,8 +57,6 @@ class ThreadForm(ModelForm):
         thread = Thread()
         self.populate_obj(thread)
         return thread
-    
-    make_public = BooleanField(u'Create public post', validators=[Optional()])
 
         
 class PostForm(ModelForm):

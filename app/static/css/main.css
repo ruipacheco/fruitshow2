@@ -95,6 +95,11 @@ abbr.nsfw {
 	margin-bottom:5px
 }
 
+small {
+	line-height:1em;
+	font-size:90%;
+}
+
 .pure-button-success,
 .pure-button-error,
 .pure-button-warning,

@@ -85,7 +85,7 @@ class User(db.Model):
         self.last_login = datetime.now()
         
     def is_active(self):
-        return not self.__role_exists(DELETED_ROLE)
+        return True
         
     def is_authenticated(self):
         return True

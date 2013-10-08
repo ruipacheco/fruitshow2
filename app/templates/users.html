@@ -1,24 +1,32 @@
 {% extends 'base.html' %}
 
 {% block content %}
+	<p><a href="{{ url_for('user') }}"><i class="icon-plus"></i>&nbsp;Add User</a></p>
 	<table class="pure-table">
 		<thead>
 			<tr>
 				<th>Username</th>
 				<th>Date Registered</th>
 				<th>Last Login</th>
+				{% if current_user.is_admin() %}
+				<th></th>
+				{% endif %}
 			</tr>
 		</thead>
 		<tbody>
-			{% for user in users.items %}
+			{% for user in users %}
 				<tr>
-					<td>
-						<a href="{{ url_for('user') }}/{{ user.display_hash|safe }}">{{ user.username|safe }}</a>
-					</td>
-					<td>
-						{{ user.date_created|safe }}
-					</td>
+					<td><a href="{{ url_for('user') }}/{{ user.display_hash|safe }}">{{ user.username|safe }}</a></td>
+					<td>{{ user.date_created|safe }}</td>
 					<td>{{ user.last_login|safe }}</td>
+					{% if current_user.is_admin() %}
+					<td>
+						<form method="POST" action="{{ url_for('users') }}">
+							<input type="hidden" name="warning_display_hash" value="{{ user.display_hash }}">
+							<button type="submit" class="pure-button pure-button-error"><i class="icon-remove"></i>&nbsp;Delete</button>
+						</form>
+					</td>
+					{% endif %}
 				</tr>
 			{% endfor %}
 		</tbody>

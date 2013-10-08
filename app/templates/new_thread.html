@@ -14,18 +14,19 @@
 	<fieldset>
 		{{ form.title }}
 		{{ form.body(cols='80', rows='10') }}
-		{% if not current_user.is_active() %}
-			{{ form.display_name }}
+		{{ form.display_name }}
+		{% if current_user.is_active() %}
+		<p>
+			<small>
+			If you fill out the nickname field the thread will be categorized as public and visible to everyone.<br />
+			If you leave the field blank, the thread will be visible to registered users who have the same roles you do.
+			</small>
+		</p>
 		{% endif %}
 		<div class="pure-g-r">
 			<div class="pure-u-1-3">
 				<label class="pure-checkbox">NSFW&nbsp;{{ form.nsfw }}</label>
 			</div>
-			{% if current_user.is_active() %}
-				<div class="pure-u-1-3">
-					<label class="pure-checkbox">Make public&nbsp;{{ form.make_public }}</label>
-				</div>
-			{% endif %}
 		</div>
 		<button type="submit" class="pure-button pure-button-success"><i class="icon-comment"></i>&nbsp;Add Comment</button>
 		<a href="{{ url_for('index') }}" class="pure-button pure-button-error">Cancel</a>

@@ -66,12 +66,8 @@ def login():
             if not user:
                 user = User.query.filter(User.email==form.identifier.data).first()
             
-            try:
-                if user and pbkdf2_sha512.verify(form.password.data, user.password.hash) and login_user(user, remember=form.remember_me.data):
-                    user.login()
-            except Exception:
-                pass
-                
+            if user and pbkdf2_sha512.verify(form.password.data, user.password.hash) and login_user(user, remember=form.remember_me.data):
+                user.login()
                 return redirect(url_for('index'))
     
     if request.method == 'GET':
@@ -110,12 +106,11 @@ def new_thread():
         if form.validate():
             thread = form.populated_object()
             if current_user.is_active():
-                if form.make_public.data is True:
+                if form.display_name.data is None:
+                    thread.user = current_user
+                else:
                     thread.display_name = current_user.username
                     thread.user = None
-                else:
-                    thread.display_name = None
-                    thread.user = current_user
             db.session.add(thread)
             db.session.commit()
             
@@ -210,14 +205,25 @@ def invite():
     return render_template('invite.html', form=form)
 
 
-@app.route('/users')
-@app.route('/users/<string:display_hash>', methods=['POST'])
+@app.route('/users', methods=['GET', 'POST'])
 @login_required
-def users(display_hash=None, page=1):
+def users(page=1):
     """ List all users. """
     
+    if request.method == 'POST':
+        if 'warning_display_hash' in request.form:
+            display_hash = request.form['warning_display_hash']
+            user = User.query.filter(User.display_hash==display_hash).first()
+            return render_template('warning.html', user=user)
+            
+        if 'display_hash' in request.form:
+            display_hash = request.form['display_hash']
+            user = User.query.filter(User.display_hash==display_hash).first()
+            db.session.delete(user)
+            db.session.commit()
+    
     users = User.query.all()
-    return render_template('users.html', users=users, current_user=current_user)
+    return render_template('users.html', users=users)
 
 
 @app.route('/user', methods=['GET', 'POST'])
@@ -236,7 +242,7 @@ def user(display_hash=None, action=None):
                 existing_user = User.query.filter(User.username==form.username.data).first()
                 if existing_user:
                     # TODO Set error to be displayed
-                    return redirect(url_for('user', display_hash=form.display_hash.data))
+                    return redirect(url_for('users'))
                     
                 user.generate_uuid()
                 db.session.add(user)
