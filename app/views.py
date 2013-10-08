@@ -203,12 +203,45 @@ def invite():
         form = InviteForm()
         
     return render_template('invite.html', form=form)
-    
 
-@app.route('/roles', methods=['GET', 'POST'])
+
+@app.route('/role', methods=['GET', 'POST'])
 @login_required
-def roles():
-    pass
+def role(page=1):
+    """ Create and list roles. """
+    
+    if not current_user.is_admin():
+        return redirect(url_for('index'))
+    
+    if request.method == 'POST':
+        if 'display_hash' in request.form:
+            display_hash = request.form['display_hash']
+            role = Role.query.filter(Role.display_hash==display_hash).first()
+            #TODO Flash message if role does not exist
+            if role:
+                db.session.delete(role)
+                db.session.commit()
+                return redirect(url_for('role', page=page))
+        
+        form = RoleForm(request.form)
+        if form.validate():
+            existing_role = Role.query.filter(Role.title==form.title.data).first()
+            #TODO If role exists, flash message
+            if not existing_role:
+                role = form.populated_object()
+                import ipdb; ipdb.set_trace()
+                if form.add_all_users.data:
+                    role.users = User.query.all()
+                
+                db.session.add(role)
+                db.session.commit()
+                return redirect(url_for('role', page=page))
+        
+    if request.method == 'GET':
+        form = RoleForm()
+    
+    pagination = Role.query.paginate(page, CONVERSATIONS_PER_PAGE, False)    
+    return render_template('roles.html', pagination=pagination, form=form)
 
 
 @app.route('/users', methods=['GET', 'POST'])
@@ -240,6 +273,7 @@ def users(page=1):
 @app.route('/user', methods=['GET', 'POST'])
 @login_required
 def add_user():
+    """ CRUD for adding a user. """
     
     if not current_user.is_admin():
         return redirect('users')

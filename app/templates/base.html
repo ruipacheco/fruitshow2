@@ -25,7 +25,7 @@
 							<li><a href="{{ url_for('user', display_hash=current_user.display_hash) }}"><i class="icon-user"></i>&nbsp;My Profile</a></li>
 							<li><a href="{{ url_for('users') }}"><i class="icon-group"></i>&nbsp;Users</a></li>
 							{% if current_user.is_admin() %}
-							<li><a href="{{ url_for('roles') }}"><i class="icon-wrench"></i>&nbsp;Edit Roles</a></li>
+							<li><a href="{{ url_for('role') }}"><i class="icon-wrench"></i>&nbsp;Edit Roles</a></li>
 							{% endif %}
 								{% if current_user.is_citizen() %}
 							<li><a href="{{ url_for('invite') }}"><i class="icon-envelope"></i>&nbsp;Invite Other Users</a></li>

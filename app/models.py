@@ -122,6 +122,11 @@ class Role(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.Unicode(255), nullable=False)
     date_created = db.Column(db.DateTime, nullable=False, default=datetime.now())
+    display_hash = db.Column(db.Unicode(255), nullable=False, unique=True)
+    
+    def __init__(self, title=None):
+        self.title = title
+        self.display_hash = custom_uuid()
     
     def __repr__(self):
         return u'<Role %r>' % (self.title)

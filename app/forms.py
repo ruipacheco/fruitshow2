@@ -8,6 +8,22 @@ from wtforms.validators import Optional, required, length, email
 from models import *
 
 
+class RoleForm(ModelForm):
+    """ Create roles """
+    
+    class Meta:
+        model = Role
+        exclude = ['display_hash']
+    add_all_users = BooleanField(u'All all users to new role')
+    
+    def populated_object(self):
+        """ Returns a new model object populated with the form values. """
+        
+        role = Role()
+        self.populate_obj(role)
+        return role
+
+
 class LoginForm(Form):
     """ Form used for login.
     

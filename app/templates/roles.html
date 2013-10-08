@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>Roles</h2>
+<form method="POST" class="pure-form pure-form-aligned" action="{{ url_for('role') }}">
+	<fieldset>
+		<label>Role&nbsp;{{ form.title }}</label>
+		<label class="pure-checkbox">{{ form.add_all_users.label }}&nbsp;{{ form.add_all_users }}</label>
+		<button type="submit" class="pure-button pure-button-success">Add Role</button>
+	</fieldset>
+</form>
+
+<h3>Existing Roles</h3>
+<table class="pure-table">
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th></th>
+		</tr>
+	</thead>
+{% for role in pagination.items %}
+	<tbody>
+		<tr>
+			<td>{{ role.title }}</td>
+			<td>
+				<form method="POST" action="{{ url_for('role') }}">
+					<input type="hidden" name="display_hash" value="{{ role.display_hash }}" />
+					<button type="submit" class="pure-button pure-button-error"><i class="icon-remove"></i>&nbsp;Delete</button>
+				</form>
+			</td>
+		</tr>
+	</tbody>
+{% endfor %}
+</table>
+<ul class="centered pure-paginator">
+    {% if pagination.has_prev %}<li><a class="prev" href="{{ url_for('role', page=pagination.prev_num) }}">&#171;</a></li>{% endif %}
+	<li>&nbsp</li>
+	<li><small>{{ pagination.page }} of {{ pagination.pages }}</small></li>
+	<li>&nbsp</li>
+    {% if pagination.has_next %}<li><a class="next" href="{{ url_for('role', page=pagination.next_num) }}">&#187;</a></li>{% endif %}
+</ul>
+{% endblock %}
