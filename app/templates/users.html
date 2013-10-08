@@ -1,7 +1,9 @@
 {% extends 'base.html' %}
 
 {% block content %}
+	{% if current_user.is_admin() %}
 	<p><a href="{{ url_for('user') }}"><i class="icon-plus"></i>&nbsp;Add User</a></p>
+	{% endif %}
 	<table class="pure-table">
 		<thead>
 			<tr>

@@ -214,13 +214,18 @@ def users(page=1):
         if 'warning_display_hash' in request.form:
             display_hash = request.form['warning_display_hash']
             user = User.query.filter(User.display_hash==display_hash).first()
-            return render_template('warning.html', user=user)
+            if current_user.is_admin() or current_user.display_hash == user.display_hash:
+                return render_template('warning.html', user=user)
+            else:
+                return redirect(url_for('users'))
             
         if 'display_hash' in request.form:
             display_hash = request.form['display_hash']
             user = User.query.filter(User.display_hash==display_hash).first()
-            db.session.delete(user)
-            db.session.commit()
+            if current_user.is_admin() or current_user.display_hash == user.display_hash:
+                db.session.delete(user)
+                db.session.commit()
+            return redirect(url_for('users'))
     
     users = User.query.all()
     return render_template('users.html', users=users)
@@ -232,7 +237,7 @@ def users(page=1):
 def user(display_hash=None, action=None):
     """ Create or edit a user. """
     
-    if request.method == 'POST':
+    if request.method == 'POST' and current_user.is_admin():
         form = UserForm(request.form)
         
         if form.validate():
@@ -241,7 +246,7 @@ def user(display_hash=None, action=None):
             if not form.display_hash.data:
                 existing_user = User.query.filter(User.username==form.username.data).first()
                 if existing_user:
-                    # TODO Set error to be displayed
+                    # TODO Set error to be displayed (flash?)
                     return redirect(url_for('users'))
                     
                 user.generate_uuid()
@@ -251,11 +256,13 @@ def user(display_hash=None, action=None):
                 registered_user.update_from_model(user)
                 
             db.session.commit()
-            
             return redirect(url_for('users'))
     
     if request.method == 'GET':
-        if display_hash:
+        if display_hash or current_user.is_active():
+            if not display_hash:
+                display_hash = current_user.display_hash
+            
             user = User.query.filter(User.display_hash==display_hash).first()
             if not user:
                 abort(404)

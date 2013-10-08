@@ -1,32 +1,79 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<form class="pure-form pure-form-stacked" method="POST" action="{{ url_for('user') }}">
-	{% if form.errors %}
-	    <ul>
-	        {% for field_name, field_errors in form.errors|dictsort if field_errors %}
-	            {% for error in field_errors %}
-	                <li>{{ form[field_name].label }}: {{ error }}</li>
-	            {% endfor %}
-	        {% endfor %}
-	    </ul>
-	{% endif %}
-	<fieldset>
-		{{ form.display_hash()|safe }}
-		<h2>User Data</h2>
-		<div class="pure-control-group">
-        	<label>Username: {{ form.username }}</label>
+
+{% if current_user.is_admin() or form.display_hash.data == current_user.display_hash %}
+	<form class="pure-form pure-form-stacked" method="POST" action="{{ url_for('user') }}">
+		{% if form.errors %}
+		    <ul>
+		        {% for field_name, field_errors in form.errors|dictsort if field_errors %}
+		            {% for error in field_errors %}
+		                <li>{{ form[field_name].label }}: {{ error }}</li>
+		            {% endfor %}
+		        {% endfor %}
+		    </ul>
+		{% endif %}
+		<fieldset>
+			{{ form.display_hash()|safe }}
+			<h2>User Data</h2>
+			<div class="pure-control-group">
+	        	<label>Username: {{ form.username }}</label>
+			</div>
+			<div class="pure-control-group">
+				<label>Password: {{ form.password }}</label>
+			</div>
+			<div class="pure-control-group">
+				<label>Email: {{ form.email }}</label>
+			</div>
+			<div class="pure-control-group">
+				<label>Last Login
+				<input type="text" name="last_login" value="{{ form.last_login.data }}" disabled />
+				</label>
+			</div>
+			<div class="pure-control-group">
+					<label>Date Created
+					<input type="text" name="date_created" value="{{ form.date_created.data }}" disabled />
+					</label>
+			</div>
+			 <div class="pure-controls">
+				 <button type="submit" class="pure-button pure-button-success">Save</button>
+				 <a href="{{ url_for('users') }}" class="pure-button pure-button-error">Cancel</a>
+			</div>
+		</fieldset>
+	</form>
+{% else %}
+	<div class="pure-g-r">
+		<div class="pure-u-1-6">
+			Username
 		</div>
-		<div class="pure-control-group">
-			<label>Password: {{ form.password }}</label>
+		<div class="pure-u-5-6">
+			{{ form.username.data }}
 		</div>
-		<div class="pure-control-group">
-			<label>Email: {{ form.email }}</label>
+	</div>
+	<div class="pure-g-r">
+		<div class="pure-u-1-6">
+			Email
 		</div>
-		 <div class="pure-controls">
-			 <button type="submit" class="pure-button pure-button-success">Save</button>
-			 <a href="{{ url_for('users') }}" class="pure-button pure-button-error">Cancel</a>
+		<div class="pure-u-5-6">
+			<a href="mailto:{{ form.email.data }}">{{ form.email.data }}</a>
 		</div>
-	</fieldset>
-</form>
+	</div>
+	<div class="pure-g-r">
+		<div class="pure-u-1-6">
+			Last Login
+		</div>
+		<div class="pure-u-5-6">
+			{{ form.last_login.data }}
+		</div>
+	</div>
+	<div class="pure-g-r">
+		<div class="pure-u-1-6">
+			Date Created
+		</div>
+		<div class="pure-u-5-6">
+			{{ form.date_created.data }}
+		</div>
+	</div>
+{% endif %}
+
 {% endblock %}

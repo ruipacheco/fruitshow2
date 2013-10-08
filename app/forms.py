@@ -3,7 +3,7 @@
 from wtforms_alchemy import ModelForm, ModelFormField
 from wtforms import widgets
 from wtforms.form import Form
-from wtforms.fields import TextField, PasswordField, BooleanField
+from wtforms.fields import TextField, PasswordField, BooleanField, DateTimeField
 from wtforms.validators import Optional, required, length, email
 from models import *
 
@@ -37,6 +37,7 @@ class UserForm(ModelForm):
         model = User
         
     display_hash = TextField(validators=[Optional()], widget=widgets.HiddenInput())
+    date_created = DateTimeField(validators=[Optional()])
     
     def populated_object(self):
         """ Returns a new model object populated with the form values. """
