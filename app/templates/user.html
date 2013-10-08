@@ -3,7 +3,7 @@
 {% block content %}
 
 {% if current_user.is_admin() or form.display_hash.data == current_user.display_hash %}
-	<form class="pure-form pure-form-stacked" method="POST" action="{{ url_for('user') }}">
+	<form class="pure-form pure-form-stacked" method="POST" action="{{ action }}">
 		{% if form.errors %}
 		    <ul>
 		        {% for field_name, field_errors in form.errors|dictsort if field_errors %}

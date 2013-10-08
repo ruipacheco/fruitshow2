@@ -203,6 +203,12 @@ def invite():
         form = InviteForm()
         
     return render_template('invite.html', form=form)
+    
+
+@app.route('/roles', methods=['GET', 'POST'])
+@login_required
+def roles():
+    pass
 
 
 @app.route('/users', methods=['GET', 'POST'])
@@ -227,50 +233,72 @@ def users(page=1):
                 db.session.commit()
             return redirect(url_for('users'))
     
-    users = User.query.all()
-    return render_template('users.html', users=users)
+    pagination = User.query.paginate(page, CONVERSATIONS_PER_PAGE, False)
+    return render_template('users.html', pagination=pagination)
 
 
 @app.route('/user', methods=['GET', 'POST'])
-@app.route('/user/<string:display_hash>', methods=['GET'])
 @login_required
-def user(display_hash=None, action=None):
-    """ Create or edit a user. """
+def add_user():
     
-    if request.method == 'POST' and current_user.is_admin():
+    if not current_user.is_admin():
+        return redirect('users')
+    
+    if request.method == 'POST':
         form = UserForm(request.form)
         
         if form.validate():
             user = form.populated_object()
+            user.generate_uuid()
+            db.session.add(user)
+            db.session.commit()        
+        return redirect(url_for('users'))
+        
+    if request.method == 'GET':
+        form = UserForm()
+        action = url_for('add_user')
+        
+    return render_template('user.html', form=form, action=action)
+
+
+@app.route('/user/<string:display_hash>', methods=['GET', 'POST'])
+@login_required
+def user(display_hash=None, action=None):
+    """ Create or edit a user. """
+    
+    if request.method == 'POST': 
+        if current_user.is_admin():
+            form = UserForm(request.form)
+        
+            if form.validate():
+                user = form.populated_object()
             
-            if not form.display_hash.data:
-                existing_user = User.query.filter(User.username==form.username.data).first()
-                if existing_user:
-                    # TODO Set error to be displayed (flash?)
-                    return redirect(url_for('users'))
+                if not form.display_hash.data:
+                    existing_user = User.query.filter(User.username==form.username.data).first()
+                    if existing_user:
+                        # TODO Set error to be displayed (flash?)
+                        return redirect(url_for('users'))
                     
-                user.generate_uuid()
-                db.session.add(user)
-            else:
-                registered_user = User.query.filter(User.display_hash==form.display_hash.data).first()
-                registered_user.update_from_model(user)
+                    user.generate_uuid()
+                    db.session.add(user)
+                else:
+                    registered_user = User.query.filter(User.display_hash==form.display_hash.data).first()
+                    registered_user.update_from_model(user)
                 
-            db.session.commit()
-            return redirect(url_for('users'))
+                db.session.commit()
+        return redirect(url_for('users'))
     
     if request.method == 'GET':
-        if display_hash or current_user.is_active():
-            if not display_hash:
-                display_hash = current_user.display_hash
+        if not display_hash:
+            abort(404)
             
-            user = User.query.filter(User.display_hash==display_hash).first()
-            if not user:
-                abort(404)
-            form = UserForm(obj=user)
-        else:
-            form = UserForm()
+        user = User.query.filter(User.display_hash==display_hash).first()
+        if not user:
+            abort(404)
+        form = UserForm(obj=user)
+        action = url_for('user', display_hash=user.display_hash)
             
-    return render_template('user.html', form=form)
+    return render_template('user.html', form=form, action=action)
     
 
 @app.route('/user/<string:display_hash>/conversations', methods=['GET'])

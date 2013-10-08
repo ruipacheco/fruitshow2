@@ -2,7 +2,7 @@
 
 {% block content %}
 	{% if current_user.is_admin() %}
-	<p><a href="{{ url_for('user') }}"><i class="icon-plus"></i>&nbsp;Add User</a></p>
+	<p><a href="{{ url_for('add_user') }}"><i class="icon-plus"></i>&nbsp;Add User</a></p>
 	{% endif %}
 	<table class="pure-table">
 		<thead>
@@ -16,9 +16,9 @@
 			</tr>
 		</thead>
 		<tbody>
-			{% for user in users %}
+			{% for user in pagination.items %}
 				<tr>
-					<td><a href="{{ url_for('user') }}/{{ user.display_hash|safe }}">{{ user.username|safe }}</a></td>
+					<td><a href="{{ url_for('user', display_hash=user.display_hash) }}">{{ user.username|safe }}</a></td>
 					<td>{{ user.date_created|safe }}</td>
 					<td>{{ user.last_login|safe }}</td>
 					{% if current_user.is_admin() %}
@@ -33,4 +33,11 @@
 			{% endfor %}
 		</tbody>
 	</table>
+	<ul class="centered pure-paginator">
+	    {% if pagination.has_prev %}<li><a class="prev" href="{{ url_for('users', page=pagination.prev_num) }}">&#171;</a></li>{% endif %}
+		<li>&nbsp</li>
+		<li><small>{{ pagination.page }} of {{ pagination.pages }}</small></li>
+		<li>&nbsp</li>
+	    {% if pagination.has_next %}<li><a class="next" href="{{ url_for('users', page=pagination.next_num) }}">&#187;</a></li>{% endif %}
+	</ul>
 {% endblock %}
