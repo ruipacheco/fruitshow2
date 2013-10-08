@@ -244,6 +244,8 @@ def add_user():
     if not current_user.is_admin():
         return redirect('users')
     
+    action = url_for('add_user')
+    
     if request.method == 'POST':
         form = UserForm(request.form)
         
@@ -252,11 +254,10 @@ def add_user():
             user.generate_uuid()
             db.session.add(user)
             db.session.commit()        
-        return redirect(url_for('users'))
+            return redirect(url_for('users'))
         
     if request.method == 'GET':
         form = UserForm()
-        action = url_for('add_user')
         
     return render_template('user.html', form=form, action=action)
 
