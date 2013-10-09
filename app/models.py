@@ -29,23 +29,27 @@ def custom_uuid():
 roles_users = db.Table('User_Role',
                         db.Column('user_id', db.Integer(), db.ForeignKey('User.id')),
                         db.Column('role_id', db.Integer(), db.ForeignKey('Role.id')))
+                        
+user_messages = db.Table('User_Message',
+                        db.Column('message_id', db.Integer(), db.ForeignKey('Message.id')),
+                        db.Column('recipient_id', db.Integer(), db.ForeignKey('User.id')))
 
 
-class Invite(db.Model):
+class Role(db.Model):
     
-    __tablename__ = 'Invite'
+    __tablename__ = 'Role'
     
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(EmailType, nullable=False)
+    title = db.Column(db.Unicode(255), nullable=False)
     date_created = db.Column(db.DateTime, nullable=False, default=datetime.now())
-    display_hash = db.Column(db.Unicode(255), nullable=False)
-
-    def __init__(self, email):
-        self.email = email
+    display_hash = db.Column(db.Unicode(255), nullable=False, unique=True)
+    
+    def __init__(self, title=None):
+        self.title = title
         self.display_hash = custom_uuid()
-
+    
     def __repr__(self):
-        return u'<Invite %r>' % (self.display_hash)
+        return u'<Role %r>' % (self.title)
 
 
 class User(db.Model):
@@ -118,21 +122,41 @@ class User(db.Model):
         return self.__role_exists(CITIZEN_ROLE)
 
 
-class Role(db.Model):
+class Message(db.Model):
     
-    __tablename__ = 'Role'
+    __tablename__ = 'Message'
     
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.Unicode(255), nullable=False)
-    date_created = db.Column(db.DateTime, nullable=False, default=datetime.now())
-    display_hash = db.Column(db.Unicode(255), nullable=False, unique=True)
-    
-    def __init__(self, title=None):
-        self.title = title
+    sender_id = db.Column(db.Integer, ForeignKey(User.id))
+    sender = relationship(User, backref='sent_messages')
+    subject = db.Column(db.Unicode(255), nullable=False)
+    body = db.Column(db.UnicodeText, nullable=False)
+    date_created = db.Column(db.DateTime, default=datetime.now())
+    display_hash = db.Column(db.Unicode(255), nullable=False)
+    recipients = relationship(User, secondary=user_messages, backref=backref('received_messages', lazy='dynamic'))
+
+    def __init__(self):
         self.display_hash = custom_uuid()
-    
+        
     def __repr__(self):
-        return u'<Role %r>' % (self.title)
+        return u'<Message %r>' % (self.subject)
+
+
+class Invite(db.Model):
+    
+    __tablename__ = 'Invite'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(EmailType, nullable=False)
+    date_created = db.Column(db.DateTime, nullable=False, default=datetime.now())
+    display_hash = db.Column(db.Unicode(255), nullable=False)
+
+    def __init__(self, email):
+        self.email = email
+        self.display_hash = custom_uuid()
+
+    def __repr__(self):
+        return u'<Invite %r>' % (self.display_hash)
 
 
 class Thread(db.Model):

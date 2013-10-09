@@ -8,6 +8,17 @@ from wtforms.validators import Optional, required, length, email
 from models import *
 
 
+class MessageForm(ModelForm):
+    class Meta:
+        model = Message
+        exclude = ['display_hash']
+        
+    def populated_object(self):
+        message = Message()
+        self.populate_obj(message)
+        return message
+
+
 class RoleForm(ModelForm):
     """ Create roles. """
     

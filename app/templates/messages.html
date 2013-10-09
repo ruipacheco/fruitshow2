@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<p><a href="{{ url_for('send_message') }}"><i class="icon-plus"></i>&nbsp;Send Message</a></p>
+<div class="pure-g-r">
+	<div class="pure-u-1-2">
+		<h3>Received Messages</h3>
+		<table class="pure-table pure-table-bordered">
+			<thead>
+				<tr>
+					<th>Date Sent</th>
+					<th>Recipients</th>
+					<th>Subject</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for message in received_messages %}
+					<tr>
+						<td>{{ message.date_created|safe }}</td>
+						<td>
+							{% for user in message.recipients %}
+							<a href="{{ url_for('user', display_hash=user.display_hash) }}">{{ user.username }}</a><br />
+							{% endfor %}
+						</td>
+						<td>{{ message.subject }}</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+	<div class="pure-u-1-2">
+		<h3>Sent Messages</h3>
+		<table class="pure-table pure-table-bordered">
+			<thead>
+				<tr>
+					<th>Date Sent</th>
+					<th>Recipients</th>
+					<th>Subject</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for message in sent_messages %}
+					<tr>
+						<td>{{ message.date_created|safe }}</td>
+						<td>
+							{% for user in message.recipients %}
+							<a href="{{ url_for('user', display_hash=user.display_hash) }}">{{ user.username }}</a><br />
+							{% endfor %}
+						</td>
+						<td>{{ message.subject }}</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+</div>
+{% endblock %}

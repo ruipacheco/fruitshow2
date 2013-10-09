@@ -179,16 +179,53 @@ def accept_invite(display_hash=None):
 
 # Actions that require users to be logged in
 
+@app.route('/sendmessage', methods=['GET', 'POST'])
+#@login_required
+def send_message():
+    """ Send a message to a number of users. """
+    
+    if request.method == 'POST':
+        form = MessageForm(request.form)
+        #TODO If not recipients, flash message
+        if form.validate() and 'recipients' in request.form:
+            message = form.populated_object()
+            message.sender = current_user
+            for display_hash in request.form.getlist('recipients'):
+                user = User.query.filter(User.display_hash==display_hash).first()
+                if user:
+                    message.recipients.append(user)
+            db.session.add(message)
+            db.session.commit()
+            return redirect(url_for('messages'))
+    
+    if request.method == 'GET':
+        form = MessageForm()
+    
+    users = User.query.filter(User.id!=current_user.id).all()
+    return render_template('send_message.html', form=form, users=users)
+
+
+@app.route('/messages', methods=['GET'])
+#@login_required
+def messages():
+    """ List sent and received messages.  """
+    
+    sent_messages = current_user.sent_messages
+    received_messages = current_user.received_messages
+    
+    return render_template('messages.html', sent_messages=sent_messages, received_messages=received_messages)
+
+
 @app.route('/invite', methods=['GET', 'POST'])
 @login_required
 def invite():
-    """ Send an email to a user inviting him to join the forum 
+    """ Send an email to a user inviting him to join the forum.
     
         The email will contain a link with a hash used to idenfity the invitation
-        and control the timeout
+        and control the timeout.
     """
     
-    if not current_user.is_citizen() and not current_user.is_admin():
+    if not current_user.is_citizen() or not current_user.is_admin():
         return redirect(url_for('index'))
     
     if request.method == 'POST':
