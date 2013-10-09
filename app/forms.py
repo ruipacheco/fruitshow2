@@ -19,6 +19,17 @@ class MessageForm(ModelForm):
         return message
 
 
+class CommentForm(ModelForm):
+    class Meta:
+        model = Comment
+        exclude = ['display_hash']
+
+    def populated_object(self):
+        comment = Comment()
+        self.populate_obj(comment)
+        return comment
+
+
 class RoleForm(ModelForm):
     """ Create roles. """
     

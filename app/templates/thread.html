@@ -2,24 +2,18 @@
 
 {% block content %}
 	<article>
-		<header>
-			<h2>{{ thread.title|safe }}</h2>
-		</header>
+		<header><h2>{{ thread.title|safe }}</h2></header>
 		{{ thread.body|oembed(urlize_all=False, maxwidth=800)|markdown|safe }}
 		<footer>
 				{% if thread.user %}
-				<a href="{{ url_for('user', display_hash=thread.user.display_hash, action=None) }}"><img src="{{ thread.user.email|gravatar }}" /></a>
-				&nbsp;
-				<div>
-					<strong><a href="{{ url_for('user', display_hash=thread.user.display_hash, action=None) }}">{{ thread.user.username|safe }}</a></strong>
+					<a href="{{ url_for('user', display_hash=thread.user.display_hash) }}"><img src="{{ thread.user.email|gravatar }}" /></a>
+					&nbsp;
+					<strong><a href="{{ url_for('user', display_hash=thread.user.display_hash) }}">{{ thread.user.username|safe }}</a></strong>
 				{% else %}
-				<div>
 					<strong>{{ thread.display_name|safe }}</strong>
 				{% endif %}
 				&nbsp;
 				<time pubdate="pubdate">{{ thread.date_created|safe }}</time>&nbsp;
-				<a href="{{ url_for('thread', display_hash=thread.display_hash, title=thread.slug()) }}"><i class="icon-anchor"></i></a>&nbsp;
-			</div>
 		</footer>
 	</article>
 	{% for post in thread.posts %}
@@ -43,7 +37,7 @@
 			</footer>
 		</article>
 	{% endfor %}
-	<form class="pure-form pure-form-stacked" method="POST" action="{{ url_for('new_thread') }}/{{ thread.display_hash|safe }}/{{ thread.slug()|safe }}">
+	<form class="pure-form pure-form-stacked" method="POST" action="{{ url_for('new_thread', display_hash=thread.display_hash, title=thread.slug()) }}">
 		{% if form.errors %}
 		    <ul>
 		        {% for field_name, field_errors in form.errors|dictsort if field_errors %}

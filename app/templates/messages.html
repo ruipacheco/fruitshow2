@@ -22,7 +22,7 @@
 							<a href="{{ url_for('user', display_hash=user.display_hash) }}">{{ user.username }}</a><br />
 							{% endfor %}
 						</td>
-						<td>{{ message.subject }}</td>
+						<td><a href="{{ url_for('message', display_hash=message.display_hash) }}">{{ message.subject }}</a></td>
 					</tr>
 				{% endfor %}
 			</tbody>
@@ -47,7 +47,7 @@
 							<a href="{{ url_for('user', display_hash=user.display_hash) }}">{{ user.username }}</a><br />
 							{% endfor %}
 						</td>
-						<td>{{ message.subject }}</td>
+						<td><a href="{{ url_for('message', display_hash=message.display_hash) }}">{{ message.subject }}</a></td>
 					</tr>
 				{% endfor %}
 			</tbody>

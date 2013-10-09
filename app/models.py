@@ -132,7 +132,7 @@ class Message(db.Model):
     subject = db.Column(db.Unicode(255), nullable=False)
     body = db.Column(db.UnicodeText, nullable=False)
     date_created = db.Column(db.DateTime, default=datetime.now())
-    display_hash = db.Column(db.Unicode(255), nullable=False)
+    display_hash = db.Column(db.Unicode(255), nullable=False, unique=True)
     recipients = relationship(User, secondary=user_messages, backref=backref('received_messages', lazy='dynamic'))
 
     def __init__(self):
@@ -140,6 +140,26 @@ class Message(db.Model):
         
     def __repr__(self):
         return u'<Message %r>' % (self.subject)
+
+
+class Comment(db.Model):
+    
+    __tablename__ = 'Comment'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    message_id = db.Column(db.Integer, ForeignKey(Message.id))
+    message = relationship(Message, backref='comments')
+    sender_id = db.Column(db.Integer, ForeignKey(User.id))
+    sender = relationship(User, backref='comments')
+    body = db.Column(db.UnicodeText, nullable=False)
+    display_hash = db.Column(db.Unicode(255), nullable=False, unique=True)
+    date_created = db.Column(db.DateTime, nullable=False, default=datetime.now())
+    
+    def __init__(self):
+        self.display_hash = custom_uuid()
+        
+    def __repr__(self):
+        return u'<Comment %r>' % (self.display_hash)
 
 
 class Invite(db.Model):

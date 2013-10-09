@@ -106,7 +106,7 @@ def new_thread():
         if form.validate():
             thread = form.populated_object()
             if current_user.is_active():
-                if form.display_name.data is None:
+                if len(form.display_name.data) == 0:
                     thread.user = current_user
                 else:
                     thread.display_name = current_user.username
@@ -180,7 +180,7 @@ def accept_invite(display_hash=None):
 # Actions that require users to be logged in
 
 @app.route('/sendmessage', methods=['GET', 'POST'])
-#@login_required
+@login_required
 def send_message():
     """ Send a message to a number of users. """
     
@@ -206,14 +206,48 @@ def send_message():
 
 
 @app.route('/messages', methods=['GET'])
-#@login_required
+@login_required
 def messages():
     """ List sent and received messages.  """
     
     sent_messages = current_user.sent_messages
     received_messages = current_user.received_messages
-    
     return render_template('messages.html', sent_messages=sent_messages, received_messages=received_messages)
+
+
+@app.route('/message/<string:display_hash>', methods=['GET', 'POST'])
+@login_required
+def message(display_hash=None):
+    
+    if not display_hash:
+        abort(404)
+        
+    message = Message.query.filter(Message.display_hash==display_hash).first()
+    #TODO Flash error message
+    if not message:
+        return redirect(url_for('messages'))
+    
+    #TODO Flash error message
+    if current_user not in message.recipients and current_user != message.sender:
+        return redirect(url_for('messages'))
+    
+    if request.method == 'POST':
+        form = CommentForm(request.form)
+        if form.validate():
+            comment = form.populated_object()
+            comment.sender = current_user
+            comment.message = message
+            db.session.add(comment)
+            db.session.commit()
+            
+        return redirect(url_for('message', display_hash=display_hash))
+        
+    if request.method == 'GET':
+        form = CommentForm()
+    
+    return render_template('message.html', message=message, form=form)
+    
+    pass
 
 
 @app.route('/invite', methods=['GET', 'POST'])
