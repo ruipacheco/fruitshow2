@@ -11,7 +11,7 @@ from models import *
 class MessageForm(ModelForm):
     class Meta:
         model = Message
-        exclude = ['display_hash']
+        exclude = ['display_hash', 'last_updated']
         
     def populated_object(self):
         message = Message()

@@ -29,10 +29,12 @@ def custom_uuid():
 roles_users = db.Table('User_Role',
                         db.Column('user_id', db.Integer(), db.ForeignKey('User.id')),
                         db.Column('role_id', db.Integer(), db.ForeignKey('Role.id')))
-                        
+
+"""
 user_messages = db.Table('User_Message',
                         db.Column('message_id', db.Integer(), db.ForeignKey('Message.id')),
                         db.Column('recipient_id', db.Integer(), db.ForeignKey('User.id')))
+"""
 
 
 class Role(db.Model):
@@ -129,17 +131,36 @@ class Message(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     sender_id = db.Column(db.Integer, ForeignKey(User.id))
     sender = relationship(User, backref='sent_messages')
+    sender_last_viewed = db.Column(db.DateTime, nullable=False)
     subject = db.Column(db.Unicode(255), nullable=False)
     body = db.Column(db.UnicodeText, nullable=False)
-    date_created = db.Column(db.DateTime, default=datetime.now())
+    date_created = db.Column(db.DateTime, nullable=False, default=datetime.now())
+    last_updated = db.Column(db.DateTime, nullable=False)
     display_hash = db.Column(db.Unicode(255), nullable=False, unique=True)
-    recipients = relationship(User, secondary=user_messages, backref=backref('received_messages', lazy='dynamic'))
+    recipients = relationship('UserMessage', backref='recipients')
 
     def __init__(self):
         self.display_hash = custom_uuid()
         
     def __repr__(self):
         return u'<Message %r>' % (self.subject)
+
+
+class UserMessage(db.Model):
+    
+    __tablename__ = 'User_Message'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    message_id = db.Column(db.Integer, ForeignKey(Message.id))
+    message = relationship(Message)
+    recipient_id = db.Column(db.Integer, ForeignKey(User.id))
+    recipient = relationship(User, backref='received_messages')
+    last_viewed = db.Column(db.DateTime, nullable=True)
+    date_created = db.Column(db.DateTime, nullable=False, default=datetime.now())
+    
+    
+    def __repr__(self):
+        return u'<UserMessage %r>' % (self.recipient)
 
 
 class Comment(db.Model):

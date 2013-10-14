@@ -8,6 +8,7 @@
 		<table class="pure-table pure-table-bordered">
 			<thead>
 				<tr>
+					<th>Updated</th>
 					<th>Date Sent</th>
 					<th>Recipients</th>
 					<th>Subject</th>
@@ -16,6 +17,7 @@
 			<tbody>
 				{% for message in received_messages %}
 					<tr>
+						<td>{% if received_messages[message] %}<i class="icon-envelope"></i>{% else %}&nbsp;{% endif %}</td>
 						<td>{{ message.date_created|safe }}</td>
 						<td>
 							{% for user in message.recipients %}
@@ -33,6 +35,7 @@
 		<table class="pure-table pure-table-bordered">
 			<thead>
 				<tr>
+					<th>Updated</th>
 					<th>Date Sent</th>
 					<th>Recipients</th>
 					<th>Subject</th>
@@ -41,6 +44,7 @@
 			<tbody>
 				{% for message in sent_messages %}
 					<tr>
+						<td>{% if sent_messages[message] %}<i class="icon-envelope"></i>{% endif %}</td>
 						<td>{{ message.date_created|safe }}</td>
 						<td>
 							{% for user in message.recipients %}

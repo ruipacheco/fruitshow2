@@ -37,7 +37,7 @@
 	<fieldset>
 		<input type="hidden" name="display_hash" value="{{ message.display_hash }}" />
 		{{ form.body(cols='80', rows='10') }}
-		<button type="submit" class="pure-button pure-button-success"><i class="icon-message"></i>&nbsp;Add Comment</button>
+		<button type="submit" class="pure-button pure-button-success"><i class="icon-envelope"></i>&nbsp;Send Message</button>
 		<a href="{{ url_for('messages') }}" class="pure-button pure-button-error">Cancel</a>
 	</fieldset>
 </form>

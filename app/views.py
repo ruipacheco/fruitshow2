@@ -18,6 +18,9 @@ from collections import OrderedDict
 import passlib
 from passlib.hash import pbkdf2_sha512
 
+import datetime
+from datetime import datetime
+
 
 def make_external(url):
     return urljoin(request.url_root, url)
@@ -90,7 +93,7 @@ def index(page=1):
         pagination = query.filter(Thread.user==None).paginate(page, CONVERSATIONS_PER_PAGE, False)
     
     for thread in pagination.items:
-        post = db.session.query(func.max(Post.id), Post.display_hash).filter(Post.thread_id==thread.id).one()
+        post = db.session.query(func.max(Post.id), Post.display_hash).filter(Post.thread==thread).one()
         threads[thread] = post[1]
     
     return render_template('index.html', threads=threads, pagination=pagination)
@@ -190,10 +193,14 @@ def send_message():
         if form.validate() and 'recipients' in request.form:
             message = form.populated_object()
             message.sender = current_user
+            message.last_updated = datetime.now()
             for display_hash in request.form.getlist('recipients'):
                 user = User.query.filter(User.display_hash==display_hash).first()
                 if user:
-                    message.recipients.append(user)
+                    user_message = UserMessage()
+                    user_message.recipient = user
+                    user_message.last_viewed = datetime.now()
+                    message.recipients.append(user_message)
             db.session.add(message)
             db.session.commit()
             return redirect(url_for('messages'))
@@ -208,27 +215,47 @@ def send_message():
 @app.route('/messages', methods=['GET'])
 @login_required
 def messages():
-    """ List sent and received messages.  """
+    """ List sent and received messages. """
     
-    sent_messages = current_user.sent_messages
-    received_messages = current_user.received_messages
+    def message_last_viewed(message=None):
+        return db.session.query(func.max(UserMessage.last_viewed)).filter(UserMessage.message==message).first()[0]
+    
+    sent_messages = OrderedDict()
+    for message in current_user.sent_messages:
+        last_viewed = message_last_viewed(message)
+        if message.sender_last_viewed != None and last_viewed > message.sender_last_viewed:
+            sent_messages[message] = True
+        else:
+            sent_messages[message] = False
+    
+    received_messages = OrderedDict()
+    for message in current_user.received_messages:
+        last_viewed = message_last_viewed(message)
+        if message.sender_last_viewed > last_viewed:
+            date_viewed = last_viewed
+        else:
+            date_viewed = message.sender_last_viewed
+        
+        user_message = current_user.received_messages[message]
+        if user_message.last_viewed < date_viewed:
+            received_messages[message] = True
+        else:
+            received_messages[message] = False
+    
     return render_template('messages.html', sent_messages=sent_messages, received_messages=received_messages)
 
 
 @app.route('/message/<string:display_hash>', methods=['GET', 'POST'])
 @login_required
 def message(display_hash=None):
+    """ Display a specific message. """
     
     if not display_hash:
         abort(404)
-        
-    message = Message.query.filter(Message.display_hash==display_hash).first()
-    #TODO Flash error message
-    if not message:
-        return redirect(url_for('messages'))
     
     #TODO Flash error message
-    if current_user not in message.recipients and current_user != message.sender:
+    message = Message.query.filter(Message.display_hash==display_hash).first()
+    if not message or message not in current_user.sent_messages and current_user not in message.recipients:
         return redirect(url_for('messages'))
     
     if request.method == 'POST':
@@ -237,17 +264,22 @@ def message(display_hash=None):
             comment = form.populated_object()
             comment.sender = current_user
             comment.message = message
+            message.last_updated = datetime.now()
             db.session.add(comment)
             db.session.commit()
-            
-        return redirect(url_for('message', display_hash=display_hash))
+            return redirect(url_for('message', display_hash=display_hash))
         
     if request.method == 'GET':
+        if current_user == message.sender:
+           message.sender_last_viewed = datetime.now()
+           db.session.commit()
+        else:
+            user_message = UserMessage.query.filter(UserMessage.message==message, UserMessage.recipient==current_user).first()
+            user_message.last_viewed = datetime.now()
+            db.session.commit()
         form = CommentForm()
-    
+        
     return render_template('message.html', message=message, form=form)
-    
-    pass
 
 
 @app.route('/invite', methods=['GET', 'POST'])
