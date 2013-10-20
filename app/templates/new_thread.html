@@ -12,14 +12,23 @@
 	    </ul>
 	{% endif %}
 	<fieldset>
+		{% if roles and roles|count > 1 %}
+			<select name="role">
+				{% for role in roles %}
+			<option value="{{ role.display_hash }}">{{ role.title }}</option>
+				{% endfor %}
+			</select>
+		{% else %}
+			<input type="hidden" name="role" value="user.roles[0].id">
+		{% endif %}
+			
 		{{ form.title }}
 		{{ form.body(cols='80', rows='10') }}
 		{{ form.display_name }}
 		{% if current_user.is_active() %}
 		<p>
 			<small>
-			If you fill out the nickname field the thread will be categorized as public and visible to everyone.<br />
-			If you leave the field blank, the thread will be visible to registered users who have the same roles you do.
+				Filling out the nickname field is the same as creating a public thread while being logged out.
 			</small>
 		</p>
 		{% endif %}

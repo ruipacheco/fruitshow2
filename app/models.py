@@ -30,12 +30,6 @@ roles_users = db.Table('User_Role',
                         db.Column('user_id', db.Integer(), db.ForeignKey('User.id')),
                         db.Column('role_id', db.Integer(), db.ForeignKey('Role.id')))
 
-"""
-user_messages = db.Table('User_Message',
-                        db.Column('message_id', db.Integer(), db.ForeignKey('Message.id')),
-                        db.Column('recipient_id', db.Integer(), db.ForeignKey('User.id')))
-"""
-
 
 class Role(db.Model):
     
@@ -210,6 +204,8 @@ class Thread(db.Model):
     date_created = db.Column(db.DateTime, nullable=False, default=datetime.now())
     created_by = db.Column(db.Integer, ForeignKey(User.id))
     user = relationship(User, backref='threads')
+    role_id = db.Column(db.Integer, ForeignKey(Role.id))
+    role = relationship(Role, backref='threads')
     display_hash = db.Column(db.Unicode(255), nullable=False, unique=True)
     display_name = db.Column(db.Unicode(255), nullable=True)
     nsfw = db.Column(db.Boolean, nullable=False, default=False)

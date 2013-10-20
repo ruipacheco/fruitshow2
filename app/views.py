@@ -112,9 +112,14 @@ def new_thread():
             if current_user.is_active():
                 if len(form.display_name.data) == 0:
                     thread.user = current_user
+                    import ipdb; ipdb.set_trace()
+                    #TODO Put Role dropdown box in Python form
+                    role_display_hash = request.form['role']
+                    thread.role = Role.query.filter(Role.display_hash==role_display_hash).first()
                 else:
                     thread.display_name = current_user.username
                     thread.user = None
+                    thread.role = None
             db.session.add(thread)
             db.session.commit()
             
@@ -123,7 +128,12 @@ def new_thread():
     if request.method == 'GET':
         form = ThreadForm()
     
-    return render_template('new_thread.html', form=form)
+    if current_user.is_active():
+        roles = current_user.roles
+    else:
+        roles = None
+        
+    return render_template('new_thread.html', form=form, roles=roles)
 
 
 @app.route('/thread/<string:display_hash>/<string:title>', methods=['GET', 'POST'])
@@ -136,8 +146,11 @@ def thread(display_hash=None, title=None):
     thread = Thread.query.filter(Thread.display_hash==display_hash).first()
     if not thread:
         abort(404)
-        
+    
     if not current_user.is_active() and thread.user is not None:
+        abort(403)
+    
+    if thread.role is not None and thread.role not in current_user.roles:
         abort(403)
     
     if request.method == 'POST':
@@ -154,10 +167,10 @@ def thread(display_hash=None, title=None):
             
             anchor = 'p' + str(post.display_hash)
             return redirect(url_for('thread', display_hash=thread.display_hash, title=thread.slug(), _anchor=anchor))
-      
+    
     if request.method == 'GET':
         form = PostForm()
-        
+    
     return render_template('thread.html', thread=thread, form=form)
 
 
