@@ -94,8 +94,9 @@ def index(page=1):
         pagination = query.filter(Thread.user==None).paginate(page, CONVERSATIONS_PER_PAGE, False)
     
     for thread in pagination.items:
-        post = db.session.query(func.max(Post.id), Post.display_hash).filter(Post.thread==thread).one()
-        threads[thread] = post[1]
+        if thread.role is not None and thread.role in current_user.roles:
+            post = db.session.query(func.max(Post.id), Post.display_hash).filter(Post.thread==thread).one()
+            threads[thread] = post[1]
     
     return render_template('index.html', threads=threads, pagination=pagination)
 

@@ -49,6 +49,10 @@ article {
 	margin-bottom:15px;
 }
 
+article img { 
+	max-width: 600px;
+}
+
 footer a {
 	text-align:center;
 	color:inherit !important;
