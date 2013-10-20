@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form method="POST" action="{{ url_for('edit_post', display_hash=post.display_hash) }}">
+	{% if form.errors %}
+	    <ul>
+	        {% for field_name, field_errors in form.errors|dictsort if field_errors %}
+	            {% for error in field_errors %}
+	                <li>{{ form[field_name].label }}: {{ error }}</li>
+	            {% endfor %}
+	        {% endfor %}
+	    </ul>
+	{% endif %}
+	<fieldset class="hidden">
+		<input type="hidden" name="display_hash" value="{{ post.display_hash }}" />
+		{{ form.body(cols='80', rows='10') }}
+		<button type="submit" class="pure-button pure-button-success"><i class="icon-comment"></i>&nbsp;Edit Comment</button>
+		<a href="{{ url_for('thread', display_hash=post.thread.display_hash, title=post.thread.slug()) }}" class="pure-button pure-button-error">Cancel</a>
+	</fieldset>
+</form>
+{% endblock %}

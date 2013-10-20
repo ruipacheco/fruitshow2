@@ -69,6 +69,7 @@ def login():
             if not user:
                 user = User.query.filter(User.email==form.identifier.data).first()
             
+            #TODO Flash message if this fails
             if user and pbkdf2_sha512.verify(form.password.data, user.password.hash) and login_user(user, remember=form.remember_me.data):
                 user.login()
                 return redirect(url_for('index'))
@@ -129,12 +130,15 @@ def new_thread():
 def thread(display_hash=None, title=None):
     """ Add comments to an existing thread. """
     
+    if display_hash is None:
+        abort(404)
+    
     thread = Thread.query.filter(Thread.display_hash==display_hash).first()
     if not thread:
         abort(404)
         
     if not current_user.is_active() and thread.user is not None:
-        return redirect(url_for('index'))
+        abort(403)
     
     if request.method == 'POST':
         form = PostForm(request.form)
@@ -152,9 +156,6 @@ def thread(display_hash=None, title=None):
             return redirect(url_for('thread', display_hash=thread.display_hash, title=thread.slug(), _anchor=anchor))
       
     if request.method == 'GET':
-        if display_hash is None:
-            abort(404)
-            
         form = PostForm()
         
     return render_template('thread.html', thread=thread, form=form)
@@ -170,8 +171,8 @@ def accept_invite(display_hash=None):
     invite = Invite.query.filter(Invite.display_hash==display_hash).first()
     if not invite:
         abort(404)
-        
-    user = User(username='', password='', email=invite.email)
+    
+    user = User(email=invite.email)
     user.generate_uuid()
     db.session.add(user)
     db.session.delete(invite)
@@ -181,6 +182,35 @@ def accept_invite(display_hash=None):
 
 
 # Actions that require users to be logged in
+
+@app.route('/post/<string:display_hash>/edit', methods=['GET', 'POST'])
+@login_required
+def edit_post(display_hash=None, action=None):
+    """ Edit an existing post. Make sure we can only edit our own posts. """
+    
+    if display_hash == None:
+        abort(404)
+    
+    post = Post.query.filter(Post.display_hash==display_hash).first()
+    if not post:
+        abort(404)
+    
+    if current_user != post.user:
+        abort(403)
+    
+    if request.method == 'POST':
+        form = PostForm(request.form)
+        if form.validate():
+            new_post = form.populated_object()
+            post.body = new_post.body
+            db.session.commit()
+            return redirect(url_for('thread', display_hash=post.thread.display_hash, title=post.thread.slug()))
+    
+    if request.method == 'GET':
+        form = PostForm(obj=post)
+    
+    return render_template('post.html', form=form, post=post)
+
 
 @app.route('/sendmessage', methods=['GET', 'POST'])
 @login_required
@@ -240,7 +270,7 @@ def messages():
         if user_message.last_viewed < date_viewed:
             received_messages[message] = True
         else:
-            received_messages[message] = False
+            received_messagesvir[message] = False
     
     return render_template('messages.html', sent_messages=sent_messages, received_messages=received_messages)
 

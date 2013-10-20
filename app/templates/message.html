@@ -2,7 +2,7 @@
 
 {% block content %}
 <article>
-	<header><h2>{{ message.title|safe }}</h2></header>
+	<header><h2>{{ message.subject|safe }}</h2></header>
 	{{ message.body|oembed(urlize_all=False, maxwidth=800)|markdown|safe }}
 	<footer>
 		<a href="{{ url_for('user', display_hash=message.sender.display_hash) }}"><img src="{{ message.sender.email|gravatar }}" /></a>&nbsp;

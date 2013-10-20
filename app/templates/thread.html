@@ -23,21 +23,23 @@
 				{% if thread.user %}
 				<img src="{{ thread.user.email|gravatar }}" />
 				&nbsp;
-				<div>
-					<strong>{{ thread.user.username|safe }}</strong>
+				<strong>{{ thread.user.username|safe }}</strong>
 				{% else %}
-				<div>
-					<strong>{{ thread.display_name|safe }}</strong>
+				<strong>{{ thread.display_name|safe }}</strong>
 				{% endif %}
 				<time pubdate="pubdate">{{ post.date_created|safe }}</time>&nbsp;
 				&nbsp;
 				<a href="{{ url_for('thread', display_hash=thread.display_hash, title=thread.slug()) }}#p{{ post.display_hash|safe }}">
 					<i class="icon-anchor"></i>
 				</a>
+				{% if post.user == current_user %}
+				&nbsp;
+				<a href="{{ url_for('edit_post', display_hash=post.display_hash) }}"><i class="icon-comment">&nbsp;</i></a>
+				{% endif %}
 			</footer>
 		</article>
 	{% endfor %}
-	<form class="pure-form pure-form-stacked" method="POST" action="{{ url_for('new_thread', display_hash=thread.display_hash, title=thread.slug()) }}">
+	<form class="pure-form pure-form-stacked" method="POST" action="{{ url_for('thread', display_hash=thread.display_hash, title=thread.slug()) }}">
 		{% if form.errors %}
 		    <ul>
 		        {% for field_name, field_errors in form.errors|dictsort if field_errors %}
