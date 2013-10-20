@@ -36,7 +36,7 @@ class RoleForm(ModelForm):
     class Meta:
         model = Role
         exclude = ['display_hash']
-    add_all_users = BooleanField(u'All existing users to new role')
+    add_all_users = BooleanField(u'Add all existing users to new role:')
     
     def populated_object(self):
         """ Returns a new model object populated with the form values. """

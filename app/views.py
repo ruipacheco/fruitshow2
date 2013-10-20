@@ -334,7 +334,7 @@ def invite():
         and control the timeout.
     """
     
-    if not current_user.is_citizen() or not current_user.is_admin():
+    if not current_user.is_citizen():
         return redirect(url_for('index'))
     
     if request.method == 'POST':
