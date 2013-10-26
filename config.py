@@ -17,6 +17,8 @@ MAIL_PASSWORD = u'your-password'
 
 ADMINS = [u'ruipacheco@hotmail.com']
 
+FORUM_NAME = u'Fruit Show'
+
 # Set these to False on production
 DEBUG = True
 SQLALCHEMY_ECHO = True

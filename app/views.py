@@ -95,9 +95,34 @@ def index(page=1):
     
     pagination = query.filter(or_(Thread.role_id.in_(conditions), Thread.role==None)).paginate(page, CONVERSATIONS_PER_PAGE, False)
     
+    threads = OrderedDict()
     for thread in pagination.items:
-        post = db.session.query(func.max(Post.id), Post.display_hash).filter(Post.thread==thread).one()
-        threads[thread] = post[1]
+        if len(thread.posts) > 0:
+            post = thread.posts[len(thread.posts) - 1]
+            threads[thread] = post
+            
+    return render_template('index.html', threads=threads, pagination=pagination)
+
+
+@app.route('/index/<string:display_hash>/page/<int:page>')
+@login_required
+def thread_by_role(display_hash=None, page=1):
+    """ List threads that belong to a specific role """
+
+    if not current_user.is_active():
+        abort(403)
+
+    role = Role.query.filter(Role.display_hash==display_hash).first()
+    if role not in current_user.roles:
+        abort(403)
+
+    pagination = Thread.query.order_by(Thread.date_created.desc()).filter(Thread.role==role).paginate(page, CONVERSATIONS_PER_PAGE, False)
+    
+    threads = OrderedDict()
+    for thread in pagination.items:
+        if len(thread.posts) > 0:
+            post = thread.posts[len(thread.posts) - 1]
+            threads[thread] = post
     
     return render_template('index.html', threads=threads, pagination=pagination)
 

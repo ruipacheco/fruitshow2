@@ -3,14 +3,14 @@
 {% block content %}
 	<h2>Conversations</h2>
 	<dl>
-		{% for thread in threads %}
+		{% for thread in pagination.items %}
 			<dt>
 				{% if thread.role %}
 					<i class="fa fa-lock"></i>
 				{% endif %}
 			
 				{% if threads[thread] %}
-					<a href="{{ url_for('thread', display_hash=thread.display_hash, title=thread.slug(), _anchor='p' + threads[thread]) }}">{{ thread.title|safe }}</a>
+					<a href="{{ url_for('thread', display_hash=thread.display_hash, title=thread.slug(), _anchor='p' + threads[thread].display_hash) }}">{{ thread.title|safe }}</a>
 				{% else %}
 					<a href="{{ url_for('thread', display_hash=thread.display_hash, title=thread.slug()) }}">{{ thread.title|safe }}</a>
 				{% endif %}
@@ -19,7 +19,7 @@
 				{% if thread.nsfw %}
 					<abbr class="nsfw">NSFW</abbr>&nbsp;
 				{% endif %}
-				<strong>{{ thread.posts|count() }}</strong> Posts&nbsp;
+				<strong>{{ thread.posts|count }}</strong> Posts&nbsp;
 				
 				Created by 
 				<strong>
@@ -32,8 +32,17 @@
 				at <strong><time pubdate="pubdate">{{ thread.date_created|safe }}</time></strong>
 				
 				{% if thread.role %}
-					for users with role <strong>{{ thread.role.title|safe }}</strong>
+					in role <strong><a href="{{ url_for('thread_by_role', display_hash=thread.role.display_hash, page=1) }}">{{ thread.role.title|safe }}</a></strong>
 				{% endif %}
+				&nbsp;
+				Last post by
+				<strong>
+				{% if thread.user %}
+					<a href="{{ url_for('user', display_hash=threads[thread].user.display_hash, action=None) }}">{{ threads[thread].user.username|safe }}</a>
+				{% else %}
+					{{ threads[thread].display_name }}
+				{% endif %}
+				</strong>
 			</dd>
 		{% endfor %}
 	</dl>
