@@ -236,7 +236,6 @@ def edit_thread(display_hash=None):
     if thread not in current_user.threads:
         abort(403)
     
-    import ipdb; ipdb.set_trace()
     if request.method == 'POST':
         form = ThreadForm(request.form)
         if form.validate():
