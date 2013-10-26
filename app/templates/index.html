@@ -5,7 +5,7 @@
 	<dl>
 		{% for thread in threads %}
 			<dt>
-			{% if thread.user %}
+			{% if thread.role %}
 				<i class="icon-lock"></i>
 			{% endif %}
 			{% if threads[thread] %}

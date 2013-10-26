@@ -88,7 +88,6 @@ def index(page=1):
     
     query = Thread.query.order_by(Thread.last_updated.desc())
     
-    #import ipdb; ipdb.set_trace()
     threads = OrderedDict()
     conditions = []
     if current_user.is_active():
@@ -110,18 +109,14 @@ def new_thread():
     if request.method == 'POST':
         form = ThreadForm(request.form)
         
+        import ipdb; ipdb.set_trace()
         if form.validate():
             thread = form.populated_object()
-            if current_user.is_active():
-                if len(form.display_name.data) == 0:
-                    thread.user = current_user
-                    #TODO Put Role dropdown box in Python form
-                    role_display_hash = request.form['role']
-                    thread.role = Role.query.filter(Role.display_hash==role_display_hash).first()
-                else:
-                    thread.display_name = current_user.username
-                    thread.user = None
-                    thread.role = None
+            if current_user.is_active() and len(form.display_name.data) == 0:
+                thread.user = current_user
+                #TODO Put Role dropdown box in Python form
+                role_display_hash = request.form['role']
+                thread.role = Role.query.filter(Role.display_hash==role_display_hash).first()
             db.session.add(thread)
             db.session.commit()
             
@@ -134,7 +129,7 @@ def new_thread():
         roles = current_user.roles
     else:
         roles = None
-        
+    
     return render_template('new_thread.html', form=form, roles=roles)
 
 
