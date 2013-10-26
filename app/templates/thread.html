@@ -30,6 +30,11 @@
 				{% if thread.role %}
 					in role <strong><a href="{{ url_for('thread_by_role', display_hash=thread.role.display_hash, page=1) }}">{{ thread.role.title|safe }}</a></strong>
 				{% endif %}
+				
+				{% if thread.user == current_user %}
+				&nbsp;
+				<a href="{{ url_for('edit_thread', display_hash=thread.display_hash) }}"><i class="fa fa-comment"></i></a>
+				{% endif %}
 			</span>
 		</footer>
 	</article>

@@ -196,6 +196,42 @@ def thread(display_hash=None, title=None):
     return render_template('thread.html', thread=thread, form=form)
 
 
+@app.route('/thread/<string:display_hash>/edit', methods=['GET', 'POST'])
+@login_required
+def edit_thread(display_hash=None):
+    """ Edit a thread """
+    
+    if display_hash is None:
+        abort(404)
+    
+    thread = Thread.query.filter(Thread.display_hash==display_hash).first()
+    if not thread:
+        abort(404)
+        
+    if not current_user.is_active() or not thread.user:
+        abort(403)
+    
+    if thread not in current_user.threads:
+        abort(403)
+    
+    if request.method == 'POST':
+        retrieved_object = form.populated_object()
+        thread.title = retrieved_object.title
+        thread.body = retrieved_object.body
+        thread.last_updated = datetime.now()
+        
+        if len(retrieved_object.display_name.data) > 0:
+            thread.user = None
+            thread.role = None
+        db.session.commit()
+        
+    if request.method == 'GET':
+        form = ThreadForm(obj=thread)
+        
+    roles = current_user.roles
+    return render_template('new_thread.html', form=form, roles=roles)
+
+
 @app.route('/accept/<string:display_hash>', methods=['GET'])
 def accept_invite(display_hash=None):
     """ Accept invite sent by email """
