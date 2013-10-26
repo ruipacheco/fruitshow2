@@ -5,27 +5,34 @@
 	<dl>
 		{% for thread in threads %}
 			<dt>
-			{% if thread.role %}
-				<i class="icon-lock"></i>
-			{% endif %}
-			{% if threads[thread] %}
-				<a href="{{ url_for('new_thread') }}/{{ thread.display_hash|safe }}/{{ thread.slug()|safe }}#p{{ threads[thread] }}">{{ thread.title|safe }}</a>
-			{% else %}
-				<a href="{{ url_for('new_thread') }}/{{ thread.display_hash|safe }}/{{ thread.slug()|safe }}">{{ thread.title|safe }}</a>
-			{% endif %}
+				{% if thread.role %}
+					<i class="fa fa-lock"></i>
+				{% endif %}
+			
+				{% if threads[thread] %}
+					<a href="{{ url_for('thread', display_hash=thread.display_hash, title=thread.slug(), _anchor='p' + threads[thread]) }}">{{ thread.title|safe }}</a>
+				{% else %}
+					<a href="{{ url_for('thread', display_hash=thread.display_hash, title=thread.slug()) }}">{{ thread.title|safe }}</a>
+				{% endif %}
 			</dt>
 			<dd>
 				{% if thread.nsfw %}
 					<abbr class="nsfw">NSFW</abbr>&nbsp;
 				{% endif %}
-				<time pubdate="pubdate">{{ thread.date_created|safe }}</time>&nbsp;
+				<strong>{{ thread.posts|count() }}</strong> Posts&nbsp;
 				
-				{{ thread.posts|count() }} Posts&nbsp;
-				
+				Created by 
+				<strong>
 				{% if thread.user %}
-					<strong><a href="{{ url_for('user', display_hash=thread.user.display_hash, action=None) }}">{{ thread.user.username|safe }}</a></strong>
+					<a href="{{ url_for('user', display_hash=thread.user.display_hash, action=None) }}">{{ thread.user.username|safe }}</a>
 				{% else %}
-					<strong>{{ thread.display_name|safe }}</strong>
+					{{ thread.display_name|safe }}
+				{% endif %}
+				</strong>
+				at <strong><time pubdate="pubdate">{{ thread.date_created|safe }}</time></strong>
+				
+				{% if thread.role %}
+					for users with role <strong>{{ thread.role.title|safe }}</strong>
 				{% endif %}
 			</dd>
 		{% endfor %}

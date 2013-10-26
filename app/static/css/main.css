@@ -7,6 +7,10 @@ body {
 	font-size: 1em;
 }
 
+a {
+	text-decoration:none;
+}
+
 header, section, footer, aside, nav, article, figure {
 	display: block; 
 }
@@ -53,6 +57,10 @@ article img {
 	max-width: 600px;
 }
 
+article a {
+	color:#6d8ac4;
+}
+
 footer a {
 	text-align:center;
 	color:inherit !important;
@@ -69,19 +77,6 @@ footer img {
 
 section {
 	margin-bottom:0.8em;
-}
-
-a {
-	text-decoration:none;
-	color:#2C649C;
-}
-
-a:visited {
-	color:#808080;
-}
-
-a:hover {
-	color:#D74B4B;
 }
 
 a.pure-button {
@@ -141,6 +136,14 @@ small {
 	min-height: 100%;
 	height:auto !important;
 	margin:0 auto -50px 0.8em;
+}
+
+#content a {
+	color:#3b8bba;
+}
+
+#content dt a:visited {
+	color:#D74B4B;
 }
 
 #header {

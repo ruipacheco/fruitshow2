@@ -20,12 +20,12 @@
 		<article id="p{{ post.display_hash }}">
 			{{ post.body|oembed(urlize_all=False, maxwidth=800)|markdown|safe }}
 			<footer>
-				{% if thread.user %}
+				{% if post.user %}
 				<img src="{{ thread.user.email|gravatar }}" />
 				&nbsp;
-				<strong>{{ thread.user.username|safe }}</strong>
+				<strong>{{ post.user.username|safe }}</strong>
 				{% else %}
-				<strong>{{ thread.display_name|safe }}</strong>
+				<strong>{{ post.display_name|safe }}</strong>
 				{% endif %}
 				<time pubdate="pubdate">{{ post.date_created|safe }}</time>&nbsp;
 				&nbsp;

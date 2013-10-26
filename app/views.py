@@ -109,7 +109,6 @@ def new_thread():
     if request.method == 'POST':
         form = ThreadForm(request.form)
         
-        import ipdb; ipdb.set_trace()
         if form.validate():
             thread = form.populated_object()
             if current_user.is_active() and len(form.display_name.data) == 0:
@@ -159,6 +158,7 @@ def thread(display_hash=None, title=None):
             thread.last_updated = post.date_created
             if current_user.is_active():
                 post.user = current_user
+                post.display_name = None
             db.session.add(post)
             db.session.commit()
             
