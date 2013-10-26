@@ -17,8 +17,8 @@
 		<footer>
 			<a href="{{ url_for('user', display_hash=comment.sender.display_hash) }}"><img src="{{ comment.sender.email|gravatar }}" /></a>
 			&nbsp;on&nbsp;<time pubdate="pubdate">{{ comment.date_created|safe }}</time>&nbsp;
-			<a href="{{ url_for('message', display_hash=message.display_hash) }}#p{{ comment.display_hash|safe }}">
-				<i class="icon-anchor"></i>
+			<a href="{{ url_for('message', display_hash=message.display_hash, _anchor='p' + comment.display_hash) }}">
+				<i class="fa fa-anchor"></i>
 			</a>
 		</footer>
 	</article>
@@ -37,7 +37,7 @@
 	<fieldset>
 		<input type="hidden" name="display_hash" value="{{ message.display_hash }}" />
 		{{ form.body(cols='80', rows='10') }}
-		<button type="submit" class="pure-button pure-button-success"><i class="icon-envelope"></i>&nbsp;Send Message</button>
+		<button type="submit" class="pure-button pure-button-success"><i class="fa fa-envelope-o"></i>&nbsp;Send Message</button>
 		<a href="{{ url_for('messages') }}" class="pure-button pure-button-error">Cancel</a>
 	</fieldset>
 </form>

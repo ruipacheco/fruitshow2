@@ -14,7 +14,7 @@
 	<fieldset class="hidden">
 		<input type="hidden" name="display_hash" value="{{ post.display_hash }}" />
 		{{ form.body(cols='80', rows='10') }}
-		<button type="submit" class="pure-button pure-button-success"><i class="icon-comment"></i>&nbsp;Edit Comment</button>
+		<button type="submit" class="pure-button pure-button-success"><i class="fa fa-comment-o"></i>&nbsp;Edit Comment</button>
 		<a href="{{ url_for('thread', display_hash=post.thread.display_hash, title=post.thread.slug()) }}" class="pure-button pure-button-error">Cancel</a>
 	</fieldset>
 </form>

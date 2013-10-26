@@ -1,15 +1,13 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<p><a href="{{ url_for('send_message') }}"><i class="icon-plus"></i>&nbsp;Send Message</a></p>
 <div class="pure-g-r">
 	<div class="pure-u-1-2">
-		<h3>Received Messages</h3>
 		<table class="pure-table pure-table-bordered">
 			<thead>
 				<tr>
-					<th>Updated</th>
-					<th>Date Sent</th>
+					<th>&nbsp;</th>
+					<th>Date Received</th>
 					<th>Recipients</th>
 					<th>Subject</th>
 				</tr>
@@ -17,25 +15,24 @@
 			<tbody>
 				{% for message in received_messages %}
 					<tr>
-						<td>{% if received_messages[message] %}<i class="icon-envelope"></i>{% else %}&nbsp;{% endif %}</td>
-						<td>{{ message.date_created|safe }}</td>
+						<td>&nbsp;</td>
+						<td><small>{{ message.date_created|safe }}</small></td>
 						<td>
 							{% for user in message.recipients %}
-							<a href="{{ url_for('user', display_hash=user.display_hash) }}">{{ user.username }}</a><br />
+							<a href="{{ url_for('user', display_hash=user.display_hash) }}">{{ user.username|safe }}</a><br />
 							{% endfor %}
 						</td>
-						<td><a href="{{ url_for('message', display_hash=message.display_hash) }}">{{ message.subject }}</a></td>
+						<td><a href="{{ url_for('message', display_hash=message.display_hash) }}">{{ message.subject|safe }}</a></td>
 					</tr>
 				{% endfor %}
 			</tbody>
 		</table>
 	</div>
 	<div class="pure-u-1-2">
-		<h3>Sent Messages</h3>
 		<table class="pure-table pure-table-bordered">
 			<thead>
 				<tr>
-					<th>Updated</th>
+					<th>&nbsp;</th>
 					<th>Date Sent</th>
 					<th>Recipients</th>
 					<th>Subject</th>
@@ -44,18 +41,19 @@
 			<tbody>
 				{% for message in sent_messages %}
 					<tr>
-						<td>{% if sent_messages[message] %}<i class="icon-envelope"></i>{% endif %}</td>
-						<td>{{ message.date_created|safe }}</td>
+						<td>&nbsp;</td>
+						<td><small>{{ message.date_created|safe }}</small></td>
 						<td>
 							{% for user in message.recipients %}
-							<a href="{{ url_for('user', display_hash=user.display_hash) }}">{{ user.username }}</a><br />
+								<a href="{{ url_for('user', display_hash=user.display_hash) }}">{{ user.username|safe }}</a><br />
 							{% endfor %}
 						</td>
-						<td><a href="{{ url_for('message', display_hash=message.display_hash) }}">{{ message.subject }}</a></td>
+						<td><a href="{{ url_for('message', display_hash=message.display_hash) }}">{{ message.subject|safe }}</a></td>
 					</tr>
 				{% endfor %}
 			</tbody>
 		</table>
 	</div>
 </div>
+<p><a href="{{ url_for('send_message') }}"><button class="pure-button pure-button-primary"><i class="fa fa-plus"></i>&nbsp;Send Message</button></a></p>
 {% endblock %}

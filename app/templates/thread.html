@@ -3,8 +3,6 @@
 {% block content %}
 	<article>
 		<header><h2>{{ thread.title|safe }}</h2></header>
-		
-		
 		{{ thread.body|oembed(urlize_all=False, maxwidth=800)|markdown|safe }}
 		<footer>
 			{% if thread.user %}
@@ -87,7 +85,7 @@
 			{% if not thread.user %}
 			{{ form.display_name }}
 			{% endif %}
-			<button type="submit" class="pure-button pure-button-success"><i class="icon-comment"></i>&nbsp;Add Comment</button>
+			<button type="submit" class="pure-button pure-button-success"><i class="fa fa-comment-o"></i>&nbsp;Add Comment</button>
 			<a href="{{ url_for('index') }}" class="pure-button pure-button-error">Cancel</a>
 		</fieldset>
 	</form>

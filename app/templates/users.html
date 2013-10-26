@@ -1,9 +1,6 @@
 {% extends 'base.html' %}
 
 {% block content %}
-	{% if current_user.is_admin() %}
-	<p><a href="{{ url_for('add_user') }}"><i class="icon-plus"></i>&nbsp;Add User</a></p>
-	{% endif %}
 	<table class="pure-table">
 		<thead>
 			<tr>
@@ -23,16 +20,18 @@
 					<td>{{ user.last_login|safe }}</td>
 					{% if current_user.is_admin() %}
 					<td>
-						<form method="POST" action="{{ url_for('users') }}">
-							<input type="hidden" name="warning_display_hash" value="{{ user.display_hash }}">
-							<button type="submit" class="pure-button pure-button-error"><i class="icon-remove"></i>&nbsp;Delete</button>
-						</form>
+						<a href="{{ url_for('delete_user', display_hash=user.display_hash, operation='delete') }}" class="pure-button pure-button-error">
+							<i class="fa fa-trash-o"></i>&nbsp;Delete
+						</a>
 					</td>
 					{% endif %}
 				</tr>
 			{% endfor %}
 		</tbody>
 	</table>
+	{% if current_user.is_admin() %}
+		<p><a href="{{ url_for('add_user') }}"><button class="pure-button pure-button-primary"><i class="fa fa-plus"></i>&nbsp;Add Users</button></a></p>
+	{% endif %}
 	<ul class="centered pure-paginator">
 	    {% if pagination.has_prev %}<li><a class="prev" href="{{ url_for('users', page=pagination.prev_num) }}">&#171;</a></li>{% endif %}
 		<li>&nbsp</li>

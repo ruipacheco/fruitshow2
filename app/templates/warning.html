@@ -2,12 +2,11 @@
 
 {% block content %}
 
-<h2>Delete User</h2>
 <p>Are you sure you want to delete <strong>{{ user.username }}</strong>?</p>
-<form class="pure-form pure-form-stacked" method="POST" action="{{ url_for('users') }}">
+<form class="pure-form pure-form-stacked" method="POST" action="{{ url_for('delete_user', display_hash=user.display_hash, operation='delete') }}">
 	<input type="hidden" name="display_hash" value="{{ user.display_hash }}" />
-	<button type="submit" class="pure-button pure-button-error"><i class="icon-remove"></i>&nbsp;Delete</button>
-	<a href="{{ url_for('users') }}" class="pure-button pure-button-primary">Cancel</a>
+	<button type="submit" class="pure-button pure-button-error"><i class="fa fa-trash-o"></i>&nbsp;Delete</button>
+	<a href="{{ url_for('users') }}" class="pure-button pure-button-success">Cancel</a>
 </form>
 
 {% endblock %}

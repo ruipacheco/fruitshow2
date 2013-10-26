@@ -141,6 +141,18 @@ small {
 	color:#D74B4B;
 }
 
+#content .fa {
+	color:white;
+}
+
+#content span .fa {
+	color:black;
+}
+
+#content dl .fa {
+	color:black;
+}
+
 #header {
 	min-height:50px;
 	margin:0;

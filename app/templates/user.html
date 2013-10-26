@@ -17,7 +17,6 @@
 			{{ form.display_hash()|safe }}
 			<div class="pure-g-r">
 				<div class="pure-u-1-2">
-					<h3>Personal Details</h3>
 					<div class="pure-control-group">
 			        	<label>Username: {{ form.username }}</label>
 					</div>
@@ -40,7 +39,6 @@
 				</div>
 				<div class="pure-u-1-2">
 					{% if roles and current_user.is_admin(): %}
-					<h3>Roles</h3>
 					<div class="pure-control-group">
 						{% for role in roles %}
 						

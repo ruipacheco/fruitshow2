@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<form class="pure-form pure-form-stacked" method="POST" action="{{ url_for('new_thread') }}">
+<form class="pure-form pure-form-stacked" method="POST" action="{{ action }}">
 	{% if form.errors %}
 	    <ul>
 	        {% for field_name, field_errors in form.errors|dictsort if field_errors %}
@@ -12,6 +12,7 @@
 	    </ul>
 	{% endif %}
 	<fieldset>
+		<label>Role
 		{% if current_user.is_active() %}
 			{% if roles and roles|count > 1 %}
 				<select name="role">
@@ -23,23 +24,26 @@
 				<input type="hidden" name="role" value="{{ current_user.roles[0].display_hash }}">
 			{% endif %}
 		{% endif %}
-			
+		</label>
+		
+		<label>Title
 		{{ form.title }}
+		</label>
+		<label>Body
 		{{ form.body(cols='80', rows='10') }}
+		</label>
+		<label>Nickname
 		{{ form.display_name }}
+		</label>
 		{% if current_user.is_active() %}
-		<p>
-			<small>
-				Filling out the nickname field is the same as creating a public thread while being logged out.
-			</small>
-		</p>
+		<p><small>Filling out the nickname field is the same as creating a public thread while being logged out.</small></p>
 		{% endif %}
 		<div class="pure-g-r">
 			<div class="pure-u-1-3">
 				<label class="pure-checkbox">NSFW&nbsp;{{ form.nsfw }}</label>
 			</div>
 		</div>
-		<button type="submit" class="pure-button pure-button-success"><i class="icon-comment"></i>&nbsp;Add Comment</button>
+		<button type="submit" class="pure-button pure-button-success"><i class="fa fa-comment-o"></i>&nbsp;Add Comment</button>
 		<a href="{{ url_for('index') }}" class="pure-button pure-button-error">Cancel</a>
 	</fieldset>
 </form>

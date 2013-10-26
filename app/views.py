@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from app import app, login_manager
-from flask import render_template, request, redirect, url_for, g, session
+from flask import render_template, request, redirect, url_for, g, session, abort
 from flask.ext.login import current_user, login_user, logout_user, login_required
 from flask.ext.mail import Message
 from sqlalchemy.sql import func
@@ -154,7 +154,7 @@ def new_thread():
     else:
         roles = None
     
-    return render_template('new_thread.html', form=form, roles=roles)
+    return render_template('new_thread.html', form=form, roles=roles, action=url_for('new_thread'))
 
 
 @app.route('/thread/<string:display_hash>/<string:title>', methods=['GET', 'POST'])
@@ -196,42 +196,6 @@ def thread(display_hash=None, title=None):
     return render_template('thread.html', thread=thread, form=form)
 
 
-@app.route('/thread/<string:display_hash>/edit', methods=['GET', 'POST'])
-@login_required
-def edit_thread(display_hash=None):
-    """ Edit a thread """
-    
-    if display_hash is None:
-        abort(404)
-    
-    thread = Thread.query.filter(Thread.display_hash==display_hash).first()
-    if not thread:
-        abort(404)
-        
-    if not current_user.is_active() or not thread.user:
-        abort(403)
-    
-    if thread not in current_user.threads:
-        abort(403)
-    
-    if request.method == 'POST':
-        retrieved_object = form.populated_object()
-        thread.title = retrieved_object.title
-        thread.body = retrieved_object.body
-        thread.last_updated = datetime.now()
-        
-        if len(retrieved_object.display_name.data) > 0:
-            thread.user = None
-            thread.role = None
-        db.session.commit()
-        
-    if request.method == 'GET':
-        form = ThreadForm(obj=thread)
-        
-    roles = current_user.roles
-    return render_template('new_thread.html', form=form, roles=roles)
-
-
 @app.route('/accept/<string:display_hash>', methods=['GET'])
 def accept_invite(display_hash=None):
     """ Accept invite sent by email """
@@ -253,6 +217,45 @@ def accept_invite(display_hash=None):
 
 
 # Actions that require users to be logged in
+
+@app.route('/thread/<string:display_hash>/edit', methods=['GET', 'POST'])
+@login_required
+def edit_thread(display_hash=None):
+    """ Edit a thread """
+    
+    if display_hash is None:
+        abort(404)
+        
+    thread = Thread.query.filter(Thread.display_hash==display_hash).first()
+    if not thread:
+        abort(404)
+        
+    if not current_user.is_active() or not thread.user:
+        abort(403)
+    
+    if thread not in current_user.threads:
+        abort(403)
+    
+    import ipdb; ipdb.set_trace()
+    if request.method == 'POST':
+        form = ThreadForm(request.form)
+        if form.validate():
+            retrieved_object = form.populated_object()
+            thread.title = retrieved_object.title
+            thread.body = retrieved_object.body
+            thread.last_updated = datetime.now()
+        
+            if len(retrieved_object.display_name) > 0:
+                thread.user = None
+                thread.role = None
+            db.session.commit()
+            return redirect(url_for('thread', display_hash=thread.display_hash, title=thread.slug()))
+        
+    if request.method == 'GET':
+        form = ThreadForm(obj=thread)
+        
+    roles = current_user.roles
+    return render_template('new_thread.html', form=form, roles=roles, action=url_for('edit_thread', display_hash=display_hash))
 
 @app.route('/post/<string:display_hash>/edit', methods=['GET', 'POST'])
 @login_required
@@ -290,11 +293,12 @@ def send_message():
     
     if request.method == 'POST':
         form = MessageForm(request.form)
-        #TODO If not recipients, flash message
+        #TODO If not recipients, flash message. Put recipients in form.
         if form.validate() and 'recipients' in request.form:
             message = form.populated_object()
             message.sender = current_user
             message.last_updated = datetime.now()
+            message.sender_last_viewed = message.last_updated
             for display_hash in request.form.getlist('recipients'):
                 user = User.query.filter(User.display_hash==display_hash).first()
                 if user:
@@ -318,32 +322,7 @@ def send_message():
 def messages():
     """ List sent and received messages. """
     
-    def message_last_viewed(message=None):
-        return db.session.query(func.max(UserMessage.last_viewed)).filter(UserMessage.message==message).first()[0]
-    
-    sent_messages = OrderedDict()
-    for message in current_user.sent_messages:
-        last_viewed = message_last_viewed(message)
-        if message.sender_last_viewed != None and last_viewed > message.sender_last_viewed:
-            sent_messages[message] = True
-        else:
-            sent_messages[message] = False
-    
-    received_messages = OrderedDict()
-    for message in current_user.received_messages:
-        last_viewed = message_last_viewed(message)
-        if message.sender_last_viewed > last_viewed:
-            date_viewed = last_viewed
-        else:
-            date_viewed = message.sender_last_viewed
-        
-        user_message = current_user.received_messages[message]
-        if user_message.last_viewed < date_viewed:
-            received_messages[message] = True
-        else:
-            received_messagesvir[message] = False
-    
-    return render_template('messages.html', sent_messages=sent_messages, received_messages=received_messages)
+    return render_template('messages.html', sent_messages=current_user.sent_messages, received_messages=current_user.received_messages)
 
 
 @app.route('/message/<string:display_hash>', methods=['GET', 'POST'])
@@ -455,24 +434,6 @@ def role(page=1):
 def users(page=1):
     """ List all users. """
     
-    if request.method == 'POST':
-        if 'warning_display_hash' in request.form:
-            display_hash = request.form['warning_display_hash']
-            user = User.query.filter(User.display_hash==display_hash).first()
-            
-            if current_user.is_admin() or current_user.display_hash == user.display_hash:
-                return render_template('warning.html', user=user)
-            else:
-                return redirect(url_for('users'))
-            
-        if 'display_hash' in request.form:
-            display_hash = request.form['display_hash']
-            user = User.query.filter(User.display_hash==display_hash).first()
-            if current_user.is_admin() or current_user.display_hash == user.display_hash:
-                db.session.delete(user)
-                db.session.commit()
-            return redirect(url_for('users'))
-    
     pagination = User.query.paginate(page, CONVERSATIONS_PER_PAGE, False)
     return render_template('users.html', pagination=pagination)
 
@@ -507,6 +468,32 @@ def add_user():
     roles = Role.query.all()
     return render_template('user.html', form=form, action=action, roles=roles)
 
+
+@app.route('/user/<string:display_hash>/<string:operation>', methods=['GET', 'POST'])
+@login_required
+def delete_user(display_hash=None, operation='delete'):
+    """ Delete a user. """
+    
+    if not current_user.is_admin():
+        abort(403)
+    
+    if not display_hash:
+        abort(404)
+        
+    user = User.query.filter(User.display_hash==display_hash).first()
+    if not user:
+        abort(404)
+        
+    if request.method == 'POST':
+        db.session.delete(user)
+        db.session.commit()
+        return redirect(url_for('users'))
+        
+    if request.method == 'GET':
+        pass
+        
+    return render_template('warning.html', user=user)
+    
 
 @app.route('/user/<string:display_hash>', methods=['GET', 'POST'])
 @login_required
