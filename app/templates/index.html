@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 
 {% block content %}
-	<h2>Conversations</h2>
 	<dl>
 		{% for thread in pagination.items %}
 			<dt>
@@ -37,10 +36,13 @@
 				&nbsp;
 				Last post by
 				<strong>
-				{% if thread.user %}
-					<a href="{{ url_for('user', display_hash=threads[thread].user.display_hash, action=None) }}">{{ threads[thread].user.username|safe }}</a>
-				{% else %}
-					{{ threads[thread].display_name }}
+					
+				{% if thread.posts|count > 0 %}
+					{% if thread.user %}
+						<a href="{{ url_for('user', display_hash=threads[thread].user.display_hash, action=None) }}">{{ threads[thread].user.username|safe }}</a>
+					{% else %}
+						{{ threads[thread].display_name }}
+					{% endif %}
 				{% endif %}
 				</strong>
 			</dd>

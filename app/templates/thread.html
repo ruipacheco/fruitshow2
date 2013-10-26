@@ -3,39 +3,66 @@
 {% block content %}
 	<article>
 		<header><h2>{{ thread.title|safe }}</h2></header>
+		
+		
 		{{ thread.body|oembed(urlize_all=False, maxwidth=800)|markdown|safe }}
 		<footer>
-				{% if thread.user %}
-					<a href="{{ url_for('user', display_hash=thread.user.display_hash) }}"><img src="{{ thread.user.email|gravatar }}" /></a>
-					&nbsp;
-					<strong><a href="{{ url_for('user', display_hash=thread.user.display_hash) }}">{{ thread.user.username|safe }}</a></strong>
-				{% else %}
-					<strong>{{ thread.display_name|safe }}</strong>
+			{% if thread.user %}
+			<a href="{{ url_for('user', display_hash=thread.user.display_hash) }}"><img src="{{ thread.user.email|gravatar }}" /></a>
+			&nbsp;
+			{% endif %}
+			
+			<span>
+				{% if thread.nsfw %}
+					<abbr class="nsfw">NSFW</abbr>&nbsp;
 				{% endif %}
-				&nbsp;
-				<time pubdate="pubdate">{{ thread.date_created|safe }}</time>&nbsp;
+			
+				Created by 
+				<strong>
+				{% if thread.user %}
+					<a href="{{ url_for('user', display_hash=thread.user.display_hash, action=None) }}">{{ thread.user.username|safe }}</a>
+				{% else %}
+					{{ thread.display_name|safe }}
+				{% endif %}
+				</strong>
+				at <strong><time pubdate="pubdate">{{ thread.date_created|safe }}</time></strong>
+			
+				{% if thread.role %}
+					in role <strong><a href="{{ url_for('thread_by_role', display_hash=thread.role.display_hash, page=1) }}">{{ thread.role.title|safe }}</a></strong>
+				{% endif %}
+			</span>
 		</footer>
 	</article>
+	
 	{% for post in thread.posts %}
 		<article id="p{{ post.display_hash }}">
 			{{ post.body|oembed(urlize_all=False, maxwidth=800)|markdown|safe }}
 			<footer>
 				{% if post.user %}
-				<img src="{{ thread.user.email|gravatar }}" />
-				&nbsp;
-				<strong>{{ post.user.username|safe }}</strong>
-				{% else %}
-				<strong>{{ post.display_name|safe }}</strong>
+					<a href="{{ url_for('user', display_hash=thread.user.display_hash) }}"><img src="{{ thread.user.email|gravatar }}" /></a>
+					&nbsp;
 				{% endif %}
-				<time pubdate="pubdate">{{ post.date_created|safe }}</time>&nbsp;
-				&nbsp;
-				<a href="{{ url_for('thread', display_hash=thread.display_hash, title=thread.slug()) }}#p{{ post.display_hash|safe }}">
-					<i class="icon-anchor"></i>
-				</a>
-				{% if post.user == current_user %}
-				&nbsp;
-				<a href="{{ url_for('edit_post', display_hash=post.display_hash) }}"><i class="icon-comment">&nbsp;</i></a>
-				{% endif %}
+				
+				<span>
+					Written by
+					<strong>
+					{% if post.user %}
+						<a href="{{ url_for('user', display_hash=post.user.display_hash, action=None) }}">{{ post.user.username|safe }}</a>
+					{% else %}
+						{{ thread.display_name|safe }}
+					{% endif %}
+					</strong>
+					at
+					<time pubdate="pubdate">{{ post.date_created|safe }}</time>&nbsp;
+				
+					<a href="{{ url_for('thread', display_hash=thread.display_hash, title=thread.slug()) }}#p{{ post.display_hash|safe }}">
+						<i class="fa fa-anchor"></i>
+					</a>
+					{% if post.user == current_user %}
+					&nbsp;
+					<a href="{{ url_for('edit_post', display_hash=post.display_hash) }}"><i class="fa fa-comment"></i></a>
+					{% endif %}
+				</span>
 			</footer>
 		</article>
 	{% endfor %}
