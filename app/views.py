@@ -5,6 +5,7 @@ from flask import render_template, request, redirect, url_for, g, session
 from flask.ext.login import current_user, login_user, logout_user, login_required
 from flask.ext.mail import Message
 from sqlalchemy.sql import func
+from sqlalchemy import or_
 from urlparse import urljoin
 from werkzeug.contrib.atom import AtomFeed
 from app import mail
@@ -87,16 +88,17 @@ def index(page=1):
     
     query = Thread.query.order_by(Thread.last_updated.desc())
     
+    #import ipdb; ipdb.set_trace()
     threads = OrderedDict()
+    conditions = []
     if current_user.is_active():
-        pagination = query.paginate(page, CONVERSATIONS_PER_PAGE, False)
-    else:
-        pagination = query.filter(Thread.user==None).paginate(page, CONVERSATIONS_PER_PAGE, False)
+        conditions = [role.id for role in current_user.roles]
+    
+    pagination = query.filter(or_(Thread.role_id.in_(conditions), Thread.role==None)).paginate(page, CONVERSATIONS_PER_PAGE, False)
     
     for thread in pagination.items:
-        if thread.role is not None and thread.role in current_user.roles:
-            post = db.session.query(func.max(Post.id), Post.display_hash).filter(Post.thread==thread).one()
-            threads[thread] = post[1]
+        post = db.session.query(func.max(Post.id), Post.display_hash).filter(Post.thread==thread).one()
+        threads[thread] = post[1]
     
     return render_template('index.html', threads=threads, pagination=pagination)
 
@@ -113,7 +115,6 @@ def new_thread():
             if current_user.is_active():
                 if len(form.display_name.data) == 0:
                     thread.user = current_user
-                    import ipdb; ipdb.set_trace()
                     #TODO Put Role dropdown box in Python form
                     role_display_hash = request.form['role']
                     thread.role = Role.query.filter(Role.display_hash==role_display_hash).first()
