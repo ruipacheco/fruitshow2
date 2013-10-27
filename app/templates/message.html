@@ -6,8 +6,10 @@
 	{{ message.body|oembed(urlize_all=False, maxwidth=800)|markdown|safe }}
 	<footer>
 		<a href="{{ url_for('user', display_hash=message.sender.display_hash) }}"><img src="{{ message.sender.email|gravatar }}" /></a>&nbsp;
-		to {% for recipient in message.recipients: %} {{ recipient.username }}, {% endfor %}
-		&nbsp;on&nbsp;<time pubdate="pubdate">{{ message.date_created|safe }}</time>
+		<span>
+			to {% for user_message in message.recipients: %} {{ user_message.recipient.username }}, {% endfor %}
+			<strong><time pubdate="pubdate">{{ message.date_created|safe }}</time></strong>
+		</span>
 	</footer>
 </article>
 
@@ -16,10 +18,12 @@
 		{{ comment.body|oembed(urlize_all=False, maxwidth=800)|markdown|safe }}
 		<footer>
 			<a href="{{ url_for('user', display_hash=comment.sender.display_hash) }}"><img src="{{ comment.sender.email|gravatar }}" /></a>
-			&nbsp;on&nbsp;<time pubdate="pubdate">{{ comment.date_created|safe }}</time>&nbsp;
-			<a href="{{ url_for('message', display_hash=message.display_hash, _anchor='p' + comment.display_hash) }}">
-				<i class="fa fa-anchor"></i>
-			</a>
+			<span>
+				&nbsp;on&nbsp;<time pubdate="pubdate">{{ comment.date_created|safe }}</time>&nbsp;
+				<a href="{{ url_for('message', display_hash=message.display_hash, _anchor='p' + comment.display_hash) }}">
+					<i class="fa fa-anchor"></i>
+				</a>
+			</span>
 		</footer>
 	</article>
 {% endfor %}

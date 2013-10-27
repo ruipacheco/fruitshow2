@@ -18,8 +18,8 @@
 						<td>&nbsp;</td>
 						<td><small>{{ message.date_created|safe }}</small></td>
 						<td>
-							{% for user in message.recipients %}
-							<a href="{{ url_for('user', display_hash=user.display_hash) }}">{{ user.username|safe }}</a><br />
+							{% for user_message in message.recipients %}
+							<a href="{{ url_for('user', display_hash=user_message.recipient.display_hash) }}">{{ user_message.recipient.username|safe }}</a><br />
 							{% endfor %}
 						</td>
 						<td><a href="{{ url_for('message', display_hash=message.display_hash) }}">{{ message.subject|safe }}</a></td>
@@ -44,8 +44,8 @@
 						<td>&nbsp;</td>
 						<td><small>{{ message.date_created|safe }}</small></td>
 						<td>
-							{% for user in message.recipients %}
-								<a href="{{ url_for('user', display_hash=user.display_hash) }}">{{ user.username|safe }}</a><br />
+							{% for user_message in message.recipients %}
+								<a href="{{ url_for('user', display_hash=user_message.recipient.display_hash) }}">{{ user_message.recipient.username|safe }}</a><br />
 							{% endfor %}
 						</td>
 						<td><a href="{{ url_for('message', display_hash=message.display_hash) }}">{{ message.subject|safe }}</a></td>
