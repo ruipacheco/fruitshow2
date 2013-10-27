@@ -168,10 +168,8 @@ def thread(display_hash=None, title=None):
     if not thread:
         abort(404)
     
-    if not current_user.is_active() and thread.user is not None:
-        abort(403)
-    
-    if thread.role is not None and thread.role not in current_user.roles:
+    if not current_user.is_active() and thread.user is not None and \
+    thread.role is not None and thread.role not in current_user.roles:
         abort(403)
     
     if request.method == 'POST':
@@ -230,10 +228,7 @@ def edit_thread(display_hash=None):
     if not thread:
         abort(404)
         
-    if not current_user.is_active() or not thread.user:
-        abort(403)
-    
-    if thread not in current_user.threads:
+    if not current_user.is_active() or not thread.user or thread not in current_user.threads:
         abort(403)
     
     if request.method == 'POST':
@@ -243,10 +238,16 @@ def edit_thread(display_hash=None):
             thread.title = retrieved_object.title
             thread.body = retrieved_object.body
             thread.last_updated = datetime.now()
+            
+            #TODO Move select box to form
+            role_display_hash = request.form['role']
+            role = Role.query.filter(Role.display_hash==role_display_hash).first()
+            thread.role = role
         
             if len(retrieved_object.display_name) > 0:
                 thread.user = None
                 thread.role = None
+                thread.display_name = retrieved_object.display_name
             db.session.commit()
             return redirect(url_for('thread', display_hash=thread.display_hash, title=thread.slug()))
         
@@ -254,7 +255,7 @@ def edit_thread(display_hash=None):
         form = ThreadForm(obj=thread)
         
     roles = current_user.roles
-    return render_template('new_thread.html', form=form, roles=roles, action=url_for('edit_thread', display_hash=display_hash))
+    return render_template('new_thread.html', form=form, roles=roles, action=url_for('edit_thread', display_hash=display_hash), thread=thread)
 
 @app.route('/post/<string:display_hash>/edit', methods=['GET', 'POST'])
 @login_required
@@ -457,7 +458,7 @@ def add_user():
             user = form.populated_object()
             user.generate_uuid()
             db.session.add(user)
-            db.session.commit()        
+            db.session.commit()
             return redirect(url_for('users'))
         
     if request.method == 'GET':

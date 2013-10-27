@@ -26,6 +26,7 @@ micawber==0.3.0
 misaka==1.0.2
 mysql-connector-python==1.0.12
 passlib==1.6.1
+readline==6.2.4.1
 shortuuid==0.4
 six==1.4.1
 stevedore==0.10
