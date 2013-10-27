@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Oct 26, 2013 at 01:48 PM
+-- Generation Time: Oct 27, 2013 at 03:49 AM
 -- Server version: 5.5.34-0ubuntu0.13.10.1
 -- PHP Version: 5.5.3-1ubuntu2
 
@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS `Comment` (
   UNIQUE KEY `display_hash` (`display_hash`),
   KEY `message_id` (`message_id`),
   KEY `sender_id` (`sender_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -71,7 +71,7 @@ CREATE TABLE IF NOT EXISTS `Message` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `display_hash` (`display_hash`),
   KEY `sender_id` (`sender_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=5 ;
 
 -- --------------------------------------------------------
 
@@ -93,7 +93,7 @@ CREATE TABLE IF NOT EXISTS `Post` (
   KEY `display_hash` (`display_hash`),
   KEY `created_by` (`created_by`),
   KEY `thread_id` (`thread_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=13 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=21 ;
 
 -- --------------------------------------------------------
 
@@ -109,7 +109,7 @@ CREATE TABLE IF NOT EXISTS `Role` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`),
   KEY `id_2` (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=5 ;
 
 --
 -- Dumping data for table `Role`
@@ -144,7 +144,7 @@ CREATE TABLE IF NOT EXISTS `Thread` (
   KEY `id` (`id`),
   KEY `display_hash` (`display_hash`),
   KEY `role_id` (`role_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=35 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=45 ;
 
 -- --------------------------------------------------------
 
@@ -166,7 +166,7 @@ CREATE TABLE IF NOT EXISTS `User` (
   UNIQUE KEY `id` (`id`),
   KEY `display_hash` (`display_hash`),
   KEY `username` (`username`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Forum users' AUTO_INCREMENT=30 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Forum users' AUTO_INCREMENT=31 ;
 
 --
 -- Dumping data for table `User`
@@ -174,14 +174,12 @@ CREATE TABLE IF NOT EXISTS `User` (
 
 INSERT INTO `User` (`id`, `username`, `password`, `display_hash`, `date_created`, `last_login`, `email`) VALUES
 (17, 'Funny Bunny', '$pbkdf2-sha512$12000$iPEeI.Tcm/M.pxQCgDBG6A$4rE5WsGhIG9CCWkGQTFN14ee139fw7lhdVTg4KMeMFyTZpuA4H.orlFhBydzuMKlOl4ldO397q1.E5AyUbCdwg', '521498', '2013-10-08 11:31:27', '2013-10-08 11:37:26', 'rui.pacheco@gmail.com'),
-(18, 'James', '$pbkdf2-sha512$12000$KyVE6J0zxrgXorT23puTcg$Knq.zIVTex7rCiw0qWMMDUZw.BoN.wD3qpB5oXxDqeGWtqf/yUnj8OusRxNMjLAlALxokxwdDHXHmQtCSn1zcQ', '235941', '2013-10-08 11:44:02', '2013-10-26 13:46:03', 'james@james.com'),
-(19, 'Hollister', '$pbkdf2-sha512$12000$.L/XGsNYa00pBcB4D.EcAw$QzrtTZ46VM51fUkt1dS/uI5u0ypvH13QQx31aN9nAQCwDP5YNE4Qg6rev2Zi5cIC8Bj4U.69SWUnKvUalDxpzA', '50411', '2013-10-08 11:44:02', '2013-10-26 13:08:31', 'hollister@hollister.com'),
+(18, 'James', '$pbkdf2-sha512$12000$KyVE6J0zxrgXorT23puTcg$Knq.zIVTex7rCiw0qWMMDUZw.BoN.wD3qpB5oXxDqeGWtqf/yUnj8OusRxNMjLAlALxokxwdDHXHmQtCSn1zcQ', '235941', '2013-10-08 11:44:02', '2013-10-27 10:56:09', 'james@james.com'),
+(19, 'Hollister', '$pbkdf2-sha512$12000$.L/XGsNYa00pBcB4D.EcAw$QzrtTZ46VM51fUkt1dS/uI5u0ypvH13QQx31aN9nAQCwDP5YNE4Qg6rev2Zi5cIC8Bj4U.69SWUnKvUalDxpzA', '50411', '2013-10-08 11:44:02', '2013-10-26 19:11:25', 'hollister@hollister.com'),
 (24, 'joe', '$pbkdf2-sha512$12000$ljLmfI9Ram1tTekdo7SW8g$eDPgQy9YiiQKZHaUUgo1AW8NDuHD7SQV7Cm.lO5fvGQmqHfOs8bOAAZGDcTlj3uIxUDYjjq.CUa6feQaDmDT9w', '500630', '2013-10-08 14:09:21', '2013-10-26 13:46:11', 'joe@joe.com'),
 (25, 'mark', '$pbkdf2-sha512$12000$YgyhtLYWgpDSmhMiBKC09g$R.zczfCdmNd.mxjE0hdXBji7iC3XYNR5niYqKRrfryCQZqi3SoX9XfXraap01sb0tbo/oksZOJurUGeowMsB9A', '61520', '2013-10-08 14:10:08', '2013-10-08 14:10:36', 'mark@mark.com'),
 (26, 'Mojojo', '$pbkdf2-sha512$12000$p3SOEeJ8Tyml9B5DCKG0tg$OZ0qWAtzblKeKLZLCGTHpztlchOtI6GlsPnUVM0q9Vsymo7L/Sjh43Ts7CAhlC/r.Ri.2mlLa8GrooYs3DOCgg', '518882', '2013-10-08 22:02:31', '2013-10-08 22:02:46', 'mojojo@mojojo.com'),
-(27, 'Bono', '$pbkdf2-sha512$12000$sRaiFCIEgHBube2917q31g$X/C0ikGmcu5JCnx6pgL4L1LUjO15aFu053UV5msptQR90P7k.DT1ntGpWGE0gXcTfhhiN5qrzh3lVjQYSgUHCw', '892060', '2013-10-08 22:32:18', '2013-10-09 17:15:07', 'bono@bono.com'),
-(28, 'bololo', '$pbkdf2-sha512$12000$H0OIkbJWitH6v5cSQqj13g$3lAiRyk.XJ9GRVyHR5SGMJcRdJz9eXW409YInwA.NRHByzBJxVyGfu9Nm3JAvhHQcSh0AHJZ8MHn3OW11zfwcQ', '669066', '2013-10-08 23:28:16', '2013-10-08 23:28:26', 'bololo@bol.com'),
-(29, 'balalala', '$pbkdf2-sha512$12000$V0rpXWstBeDcmzPmfI/Rmg$xvx8fzSMtNCC5d62rRn1qCWHTU7EdeYZyUDQqZ/Qk..9UnlJhSEqynILwsMwMvuJ6X4ErbhpiUYZEH1hpAYIoA', '756327', '2013-10-08 23:28:16', '2013-10-08 23:28:48', 'balalala@balala.com');
+(27, 'Bono', '$pbkdf2-sha512$12000$sRaiFCIEgHBube2917q31g$X/C0ikGmcu5JCnx6pgL4L1LUjO15aFu053UV5msptQR90P7k.DT1ntGpWGE0gXcTfhhiN5qrzh3lVjQYSgUHCw', '892060', '2013-10-08 22:32:18', '2013-10-09 17:15:07', 'bono@bono.com');
 
 -- --------------------------------------------------------
 
@@ -198,7 +196,7 @@ CREATE TABLE IF NOT EXISTS `User_Message` (
   PRIMARY KEY (`id`),
   KEY `message_id` (`message_id`),
   KEY `recipient_id` (`recipient_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=3 ;
 
 -- --------------------------------------------------------
 
@@ -225,10 +223,10 @@ INSERT INTO `User_Role` (`user_id`, `role_id`) VALUES
 (25, 3),
 (26, 3),
 (27, 3),
-(28, 3),
-(29, 3),
 (24, 2),
-(25, 2);
+(25, 2),
+(18, 1),
+(18, 2);
 
 --
 -- Constraints for dumped tables
