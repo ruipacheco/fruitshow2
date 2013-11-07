@@ -8,10 +8,11 @@ other registered users.
 
 Installation for Development
 ------------
-1. Install [virtualenv-burrito](https://github.com/brainsik/virtualenv-burrito)
-2. Create a workspace and activate it
-3. Checkout the project from github
-4. `pip install -r requirements.txt`
-5. Install the database from the sql file
-6. Edit `config.py` 
-7. `python fruitshow.py`
+1. sudo apt-get install install libncurses5-dev
+2. Install [virtualenv-burrito](https://github.com/brainsik/virtualenv-burrito)
+3. Create a workspace and activate it
+4. Checkout the project from github
+5. `pip install -r requirements.txt`
+6. Install the database from the sql file
+7. Edit `config.py` 
+8. `python fruitshow.py`
